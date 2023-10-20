@@ -2,6 +2,14 @@
   "name": "koishi-plugin-maimaidx",
   "description": "由Hoshino插件移植的国服舞萌DX查询插件",
   "version": "0.0.1",
+  "contributors": [
+    "TTsdzb <ttsdzb@outlook.com>"
+  ],
+  "homepage": "https://github.com/TTsdzb/koishi-plugin-maimaidx",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TTsdzb/koishi-plugin-maimaidx.git"
+  },
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -13,7 +21,8 @@
   "keywords": [
     "chatbot",
     "koishi",
-    "plugin"
+    "plugin",
+    "maimai"
   ],
   "peerDependencies": {
     "koishi": "^4.15.1"

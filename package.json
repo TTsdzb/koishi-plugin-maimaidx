@@ -1,6 +1,6 @@
 {
   "name": "koishi-plugin-maimaidx",
-  "description": "由Hoshino插件移植的国服舞萌DX查询插件，提供歌曲、成绩查询功能",
+  "description": "由Hoshino插件重写的国服舞萌DX查询插件，提供歌曲、成绩查询功能",
   "version": "0.0.1",
   "contributors": [
     "TTsdzb <ttsdzb@outlook.com>"

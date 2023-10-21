@@ -36,5 +36,8 @@
       "optional": [],
       "implements": []
     }
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
   }
 }

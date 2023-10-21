@@ -11,6 +11,7 @@ import { ApiMusic } from "./diving_fish";
 export const ChartInfo = z.object({
   id: z.number().int(),
   music: z.number().int(),
+  order: z.number().int(),
   ds: z.number(),
   level: z.string(),
   notes: z.number().int().array(),
@@ -45,6 +46,7 @@ export function extendChartInfo(ctx: Context) {
     {
       id: "unsigned",
       music: "unsigned",
+      order: "unsigned",
       ds: "float",
       level: "string",
       notes: "json",
@@ -74,6 +76,7 @@ export function extractChartInfo(music: ApiMusic): ChartInfo[] {
       ChartInfo.parse({
         id: music.cids[i],
         music: music.id,
+        order: i,
         ds: music.ds[i],
         level: music.level[i],
         ...music.charts[i],

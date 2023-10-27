@@ -30,23 +30,21 @@ export const ApiMusic = z.object({
   }),
 });
 
+export const ApiChartStat = z
+  .object({
+    cnt: z.number().int(),
+    diff: z.string(),
+    fit_diff: z.number(),
+    avg: z.number(),
+    avg_dx: z.number(),
+    std_dev: z.number(),
+    dist: z.number().int().array(),
+    fc_dist: z.number().int().array(),
+  })
+  .partial();
+
 export const ApiChartStats = z.object({
-  charts: z.record(
-    z.coerce.number().int(),
-    z
-      .object({
-        cnt: z.number().int(),
-        diff: z.string(),
-        fit_diff: z.number(),
-        avg: z.number(),
-        avg_dx: z.number(),
-        std_dev: z.number(),
-        dist: z.number().int().array(),
-        fc_dist: z.number().int().array(),
-      })
-      .partial()
-      .array()
-  ),
+  charts: z.record(z.coerce.number().int(), ApiChartStat.array()),
   diff_data: z.record(
     z.string(),
     z.object({
@@ -58,4 +56,5 @@ export const ApiChartStats = z.object({
 });
 
 export type ApiMusic = z.infer<typeof ApiMusic>;
+export type ApiChartStat = z.infer<typeof ApiChartStat>;
 export type ApiChartStats = z.infer<typeof ApiChartStats>;

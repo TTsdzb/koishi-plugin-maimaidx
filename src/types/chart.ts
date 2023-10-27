@@ -1,6 +1,6 @@
 import { Context } from "koishi";
 import { z } from "zod";
-import { ApiMusic } from "./diving_fish";
+import { ApiChartStat, ApiMusic } from "./diving_fish";
 
 /**
  * Scheme representing information of a chart (谱面).
@@ -16,6 +16,7 @@ export const ChartInfo = z.object({
   level: z.string(),
   notes: z.number().int().array(),
   charter: z.string(),
+  stat: ApiChartStat,
 });
 
 export type ChartInfo = z.infer<typeof ChartInfo>;
@@ -51,6 +52,7 @@ export function extendChartInfo(ctx: Context) {
       level: "string",
       notes: "json",
       charter: "string",
+      stat: "json",
     },
     {
       primary: "id",
@@ -63,13 +65,17 @@ export function extendChartInfo(ctx: Context) {
 }
 
 /**
- * Extract `ChartInfo` of a music from `ApiMusic`.
+ * Extract `ChartInfo` of a music from `ApiMusic` and `ApiChartStat`.
  *
  * Note that a music contains multiple charts.
  * @param music Music object returned by the API
+ * @param stats Chart stats of the music
  * @returns Basic info of the charts
  */
-export function extractChartInfo(music: ApiMusic): ChartInfo[] {
+export function extractChartInfo(
+  music: ApiMusic,
+  stats: ApiChartStat
+): ChartInfo[] {
   let charts: ChartInfo[] = [];
   for (let i = 0; i < music.charts.length; i++) {
     charts.push(
@@ -79,6 +85,7 @@ export function extractChartInfo(music: ApiMusic): ChartInfo[] {
         order: i,
         ds: music.ds[i],
         level: music.level[i],
+        stat: stats[i],
         ...music.charts[i],
       })
     );

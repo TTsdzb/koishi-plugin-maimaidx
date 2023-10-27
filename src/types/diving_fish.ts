@@ -1,3 +1,4 @@
+import { Context } from "koishi";
 import { z } from "zod";
 
 /**
@@ -58,3 +59,25 @@ export const ApiChartStats = z.object({
 export type ApiMusic = z.infer<typeof ApiMusic>;
 export type ApiChartStat = z.infer<typeof ApiChartStat>;
 export type ApiChartStats = z.infer<typeof ApiChartStats>;
+
+/**
+ * Get all music from Diving-fish API.
+ * @param ctx Context object of Koishi
+ * @returns Fetched music list
+ */
+export async function loadMusic(ctx: Context): Promise<ApiMusic[]> {
+  return await ctx.http.get<ApiMusic[]>(
+    "https://www.diving-fish.com/api/maimaidxprober/music_data"
+  );
+}
+
+/**
+ * Get chart statistics from Diving-fish API.
+ * @param ctx Context object of Koishi
+ * @returns Fetched chart stats
+ */
+export async function loadChartStats(ctx: Context): Promise<ApiChartStats> {
+  return await ctx.http.get<ApiChartStats>(
+    "https://www.diving-fish.com/api/maimaidxprober/chart_stats"
+  );
+}

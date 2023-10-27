@@ -74,7 +74,7 @@ export function extendChartInfo(ctx: Context) {
  */
 export function extractChartInfo(
   music: ApiMusic,
-  stats: ApiChartStat
+  stats: ApiChartStat[]
 ): ChartInfo[] {
   let charts: ChartInfo[] = [];
   for (let i = 0; i < music.charts.length; i++) {

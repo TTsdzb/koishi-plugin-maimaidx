@@ -45,7 +45,7 @@ export const ApiChartStat = z
   .partial();
 
 export const ApiChartStats = z.object({
-  charts: z.record(z.coerce.number().int(), ApiChartStat.array()),
+  charts: z.record(z.string(), ApiChartStat.array()),
   diff_data: z.record(
     z.string(),
     z.object({
@@ -66,8 +66,10 @@ export type ApiChartStats = z.infer<typeof ApiChartStats>;
  * @returns Fetched music list
  */
 export async function loadMusic(ctx: Context): Promise<ApiMusic[]> {
-  return await ctx.http.get<ApiMusic[]>(
-    "https://www.diving-fish.com/api/maimaidxprober/music_data"
+  return ApiMusic.array().parse(
+    await ctx.http.get(
+      "https://www.diving-fish.com/api/maimaidxprober/music_data"
+    )
   );
 }
 
@@ -77,7 +79,9 @@ export async function loadMusic(ctx: Context): Promise<ApiMusic[]> {
  * @returns Fetched chart stats
  */
 export async function loadChartStats(ctx: Context): Promise<ApiChartStats> {
-  return await ctx.http.get<ApiChartStats>(
-    "https://www.diving-fish.com/api/maimaidxprober/chart_stats"
+  return ApiChartStats.parse(
+    await ctx.http.get<ApiChartStats>(
+      "https://www.diving-fish.com/api/maimaidxprober/chart_stats"
+    )
   );
 }

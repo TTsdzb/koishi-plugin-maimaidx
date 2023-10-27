@@ -85,7 +85,7 @@ export function extractChartInfo(
         order: i,
         ds: music.ds[i],
         level: music.level[i],
-        stat: stats[i],
+        stat: stats ? stats[i] : {},
         ...music.charts[i],
       })
     );

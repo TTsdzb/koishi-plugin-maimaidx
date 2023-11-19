@@ -2,4 +2,4 @@
  * Image generation with Puppeteer.
  */
 
-export * from "./music_simple";
+export * from "./music";

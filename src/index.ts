@@ -1,6 +1,6 @@
 import { Context, Logger, Schema } from "koishi";
 import { extendDatabase, loadData } from "./database";
-import { drawMusicSimple } from "./images";
+import { drawMusic } from "./images";
 
 export const name = "maimaidx";
 export const using = ["database", "puppeteer"];
@@ -28,7 +28,7 @@ export function apply(ctx: Context, config: Config) {
   });
 
   ctx.command("test").action(async (_) => {
-    return drawMusicSimple(
+    return drawMusic(
       config,
       (
         await ctx.database.get("maimai_music_info", {

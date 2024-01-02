@@ -1,0 +1,36 @@
+commands:
+  mai:
+    description: Maimai相关功能。
+
+    search:
+      description: 根据给定信息搜索歌曲。
+
+      id:
+        description: 使用歌曲的谱面ID查找歌曲。
+        options:
+          id: 谱面的ID。
+
+      title:
+        description: 通过歌曲标题搜索歌曲。
+        options:
+          title: 歌曲标题或标题的一部分。
+
+      alias:
+        description: 通过歌曲别名搜索歌曲。
+        options:
+          alias: 歌曲的别名。
+
+      artist:
+        description: 通过歌曲的曲师搜索歌曲。
+        options:
+          artist: 曲师名称或名称的一部分。
+
+      charter:
+        description: 通过谱师搜索歌曲。
+        options:
+          charter: 谱师名称或名称的一部分。
+
+    b50:
+      description: 查询玩家的B50。
+      options:
+        player: 要查询的玩家名称。如果不指定，则查询发送者自身的B50。

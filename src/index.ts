@@ -11,10 +11,14 @@ export interface Config {
 }
 
 export const Config: Schema<Config> = Schema.object({
-  assetsPath: Schema.path().required().description("资源文件的存储路径"),
+  assetsPath: Schema.path()
+    .required()
+    .description(
+      "资源文件的存储路径。如果你不知道填什么，请查看[文档中的“使用”部分](https://github.com/TTsdzb/koishi-plugin-maimaidx#%E4%BD%BF%E7%94%A8)。"
+    ),
   botName: Schema.string()
     .default("Koishi")
-    .description("生成图片时要展示的Bot名称"),
+    .description("生成图片时要展示的Bot名称。"),
 });
 
 export function apply(ctx: Context, config: Config) {

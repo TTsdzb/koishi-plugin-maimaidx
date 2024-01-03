@@ -1,6 +1,7 @@
 import { Context, Logger, Schema } from "koishi";
 import { extendDatabase, loadData } from "./database";
 import { drawMusic } from "./images";
+import { registerCommands } from "./commands";
 
 export const name = "maimaidx";
 export const using = ["database", "puppeteer"];
@@ -38,16 +39,19 @@ export function apply(ctx: Context, config: Config) {
     await loadData(ctx);
   });
 
+  // Register commands provided by plugin
+  registerCommands(ctx, config);
+
   ctx.command("test").action(async (_) => {
     return drawMusic(
       config,
       (
         await ctx.database.get("maimai_music_info", {
-          id: 301,
+          id: 10301,
         })
       )[0],
       await ctx.database.get("maimai_chart_info", {
-        music: 301,
+        music: 10301,
       })
     );
   });

@@ -9,6 +9,9 @@ commands:
         description: 使用歌曲的谱面ID查找歌曲。
         options:
           id: 谱面的ID。
+        messages:
+          pleaseProvideId: "请指定乐曲ID。"
+          songWithIdNotFound: "未找到ID为{0}的乐曲。"
 
       title:
         description: 通过歌曲标题搜索歌曲。

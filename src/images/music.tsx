@@ -52,11 +52,11 @@ export function drawMusicSimple(
           {`
             @font-face {
               font-family: "torus";
-              src: url("file://${config.assetsPath}/Torus SemiBold.otf");
+              src: url("${config.assetsPath}/Torus SemiBold.otf");
             }
             @font-face {
               font-family: "siyuan";
-              src: url("file://${config.assetsPath}/SourceHanSansSC-Bold.otf");
+              src: url("${config.assetsPath}/SourceHanSansSC-Bold.otf");
             }
           `}
         </style>
@@ -66,13 +66,13 @@ export function drawMusicSimple(
           position: absolute;
           width: 700px;
           height: 1000px;
-          background-image: url(file://${config.assetsPath}/mai/pic/music_bg.png);
+          background-image: url(${config.assetsPath}/mai/pic/music_bg.png);
           margin: 0;
         `}
       >
         <img
           style="position: absolute; left: 150px; top: 170px"
-          src={`file://${config.assetsPath}/mai/pic/music-${
+          src={`${config.assetsPath}/mai/pic/music-${
             category[music.genre]
           }.png`}
         />
@@ -84,7 +84,12 @@ export function drawMusicSimple(
             width: 360px;
             height: 360px;
           "
-          src={`file://${config.assetsPath}/mai/cover/${music.id}.png`}
+          src={`https://www.diving-fish.com/covers/${(music.id > 10000
+            ? music.id - 10000
+            : music.id
+          )
+            .toString()
+            .padStart(5, "0")}.png`}
         />
         <img
           style="
@@ -94,7 +99,7 @@ export function drawMusicSimple(
             width: 94px;
             height: 35px;
           "
-          src={`file://${config.assetsPath}/mai/pic/${music.type}.png`}
+          src={`${config.assetsPath}/mai/pic/${music.type}.png`}
         />
         <hr
           style="
@@ -310,11 +315,11 @@ export function drawMusic(
           {`
             @font-face {
               font-family: "torus";
-              src: url("file://${config.assetsPath}/Torus SemiBold.otf");
+              src: url("${config.assetsPath}/Torus SemiBold.otf");
             }
             @font-face {
               font-family: "siyuan";
-              src: url("file://${config.assetsPath}/SourceHanSansSC-Bold.otf");
+              src: url("${config.assetsPath}/SourceHanSansSC-Bold.otf");
             }
           `}
         </style>
@@ -324,7 +329,7 @@ export function drawMusic(
             position: absolute;
             width: 1800px;
             height: 1600px;
-            background-image: url(file://${config.assetsPath}/mai/pic/song_bg.png);
+            background-image: url(${config.assetsPath}/mai/pic/song_bg.png);
             margin: 0;
           `}
       >
@@ -336,7 +341,12 @@ export function drawMusic(
             width: 400px;
             height: 400px;
           "
-          src={`file://${config.assetsPath}/mai/cover/${music.id}.png`}
+          src={`https://www.diving-fish.com/covers/${(music.id > 10000
+            ? music.id - 10000
+            : music.id
+          )
+            .toString()
+            .padStart(5, "0")}.png`}
         />
         <img
           style="
@@ -346,7 +356,7 @@ export function drawMusic(
             width: 250px;
             height: 120px;
           "
-          src={`file://${config.assetsPath}/mai/pic/${music.from}.png`}
+          src={`${config.assetsPath}/mai/pic/${music.from}.png`}
         />
         <img
           style="
@@ -356,7 +366,7 @@ export function drawMusic(
             width: 140px;
             height: 52px;
           "
-          src={`file://${config.assetsPath}/mai/pic/${music.type}.png`}
+          src={`${config.assetsPath}/mai/pic/${music.type}.png`}
         />
         <p
           style="

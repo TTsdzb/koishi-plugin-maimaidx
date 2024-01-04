@@ -33,17 +33,17 @@ declare module "koishi" {
    * Database table declaration.
    */
   interface Tables {
-    maimai_chart_info: IChartInfo;
+    "maimaidx.chart_info": IChartInfo;
   }
 }
 
 /**
- * Extend table `maimai_chart_info` on the given context.
+ * Extend table `maimaidx.chart_info` on the given context.
  * @param ctx The context of koishi
  */
 export function extendChartInfo(ctx: Context) {
   ctx.model.extend(
-    "maimai_chart_info",
+    "maimaidx.chart_info",
     {
       id: "unsigned",
       music: "unsigned",
@@ -58,7 +58,7 @@ export function extendChartInfo(ctx: Context) {
       primary: "id",
       autoInc: false,
       foreign: {
-        music: ["maimai_music_info", "id"],
+        music: ["maimaidx.music_info", "id"],
       },
     }
   );

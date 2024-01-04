@@ -52,11 +52,11 @@ export async function loadData(ctx: Context) {
     return;
   }
 
-  await ctx.database.remove("maimai_chart_info", {});
-  await ctx.database.remove("maimai_music_info", {});
+  await ctx.database.remove("maimaidx.chart_info", {});
+  await ctx.database.remove("maimaidx.music_info", {});
 
-  await ctx.database.upsert("maimai_music_info", musics);
-  await ctx.database.upsert("maimai_chart_info", charts);
+  await ctx.database.upsert("maimaidx.music_info", musics);
+  await ctx.database.upsert("maimaidx.chart_info", charts);
 
   logger.info("Maimai data loaded.");
 }

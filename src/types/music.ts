@@ -31,17 +31,17 @@ declare module "koishi" {
    * Database table declaration.
    */
   interface Tables {
-    maimai_music_info: IMusicInfo;
+    "maimaidx.music_info": IMusicInfo;
   }
 }
 
 /**
- * Extend table `maimai_music_info` on the given context.
+ * Extend table `maimaidx.music_info` on the given context.
  * @param ctx The context of koishi
  */
 export function extendMusicInfo(ctx: Context) {
   ctx.model.extend(
-    "maimai_music_info",
+    "maimaidx.music_info",
     {
       id: "unsigned",
       title: "string",

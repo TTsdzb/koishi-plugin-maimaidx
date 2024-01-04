@@ -46,11 +46,11 @@ export function apply(ctx: Context, config: Config) {
     return drawMusic(
       config,
       (
-        await ctx.database.get("maimai_music_info", {
+        await ctx.database.get("maimaidx.music_info", {
           id: 10301,
         })
       )[0],
-      await ctx.database.get("maimai_chart_info", {
+      await ctx.database.get("maimaidx.chart_info", {
         music: 10301,
       })
     );

@@ -18,14 +18,14 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       if (id === undefined) return session.text(".pleaseProvideId");
 
       // Query the database for music.
-      const musics = await ctx.database.get("maimai_music_info", {
+      const musics = await ctx.database.get("maimaidx.music_info", {
         id,
       });
 
       // Check if the queried music exists.
       if (musics.length === 0) return session.text(".songWithIdNotFound", [id]);
       else {
-        const charts = await ctx.database.get("maimai_chart_info", {
+        const charts = await ctx.database.get("maimaidx.chart_info", {
           music: id,
         });
 

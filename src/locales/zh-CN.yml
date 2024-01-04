@@ -7,16 +7,27 @@ commands:
 
       id:
         description: 使用歌曲的谱面ID查找歌曲。
-        options:
-          id: 谱面的ID。
+        usage: |-
+          你也可以直接使用该命令的快捷匹配：id&lt;谱面ID&gt;
+        examples: |-
+          /mai.search.id 47
+          id47
         messages:
-          pleaseProvideId: "请指定乐曲ID。"
-          songWithIdNotFound: "未找到ID为{0}的乐曲。"
+          pleaseProvideId: 请指定乐曲ID。
+          songWithIdNotFound: 未找到ID为{0}的乐曲。
 
       title:
         description: 通过歌曲标题搜索歌曲。
-        options:
-          title: 歌曲标题或标题的一部分。
+        usage: |-
+          你也可以直接使用该命令的快捷匹配：id&lt;谱面ID&gt;
+        examples: |-
+          /mai.search.title PANDORA PARADOXXX
+          查歌PANDORA PARADOXXX
+        messages:
+          pleaseProvideTitle: 请指定要搜索的标题。
+          songWithTitleNotFound: 没有找到标题包含"{0}"的乐曲。
+          tooManyResults: 结果过多（{0}条），请使用更长的字段查询。
+          followingResultsFound: 找到以下结果，请使用ID查询单个乐曲信息：
 
       alias:
         description: 通过歌曲别名搜索歌曲。

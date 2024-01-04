@@ -341,7 +341,8 @@ export function drawMusic(
             width: 400px;
             height: 400px;
           "
-          src={`https://www.diving-fish.com/covers/${(music.id > 10000
+          src={`https://www.diving-fish.com/covers/${(music.id > 10000 &&
+          music.id <= 11000
             ? music.id - 10000
             : music.id
           )

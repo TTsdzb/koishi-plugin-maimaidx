@@ -19,7 +19,7 @@ commands:
       title:
         description: 通过歌曲标题搜索歌曲。
         usage: |-
-          你也可以直接使用该命令的快捷匹配：id&lt;谱面ID&gt;
+          你也可以直接使用该命令的快捷匹配：查歌&lt;曲名&gt;
         examples: |-
           /mai.search.title PANDORA PARADOXXX
           查歌PANDORA PARADOXXX
@@ -31,20 +31,66 @@ commands:
 
       alias:
         description: 通过歌曲别名搜索歌曲。
-        options:
-          alias: 歌曲的别名。
 
       artist:
         description: 通过歌曲的曲师搜索歌曲。
-        options:
-          artist: 曲师名称或名称的一部分。
 
       charter:
         description: 通过谱师搜索歌曲。
-        options:
-          charter: 谱师名称或名称的一部分。
 
-    b50:
-      description: 查询玩家的B50。
-      options:
-        player: 要查询的玩家名称。如果不指定，则查询发送者自身的B50。
+      bpm:
+        description: 通过BPM范围搜索歌曲。
+
+      base:
+        description: 通过谱面定数搜索歌曲。
+
+    base:
+      description: 查询指定难度的定数表。
+
+    scores:
+      description: 玩家分数查询相关功能。
+
+      b50:
+        description: 查询玩家的B50。
+
+      single:
+        description: 查询玩家的某单曲成绩。
+
+      global:
+        description: 查询某一谱面的统计信息。
+
+      base:
+        description: 查询某一难度的完成表。
+
+      rank:
+        description: 查看玩家排行。
+
+    progress:
+      description: 玩家进度查询相关功能。
+
+      level:
+        description: 查询指定难度的进度。
+
+      plate:
+        description: 查询指定牌子的进度。
+
+    random:
+      description: 从曲库中随机一首乐曲。
+
+    fortune:
+      description: 今日舞萌相关功能。
+
+      today:
+        description: 查询今日舞萌。
+
+      tomorrow:
+        description: 今天状态不佳？查查明日舞萌！
+
+    update:
+      description: 更新插件信息。
+
+      maimai:
+        description: 更新舞萌的歌曲和谱面信息。一般只需在游戏更新，查分器适配完成后运行一次。重启Koishi也会自动更新。
+
+      alias:
+        description: 更新歌曲的别名信息。插件会自动定时更新，一般无需手动运行。重启Koishi也会自动更新。

@@ -79,5 +79,6 @@ export function registerCommandSearch(ctx: Context, config: Config) {
           {results}
         </>
       );
-    });
+    })
+    .shortcut(/^查歌\s?(.+)$/i, { args: ["$1"] });
 }

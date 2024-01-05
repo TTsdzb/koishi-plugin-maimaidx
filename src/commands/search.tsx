@@ -12,7 +12,7 @@ import { drawMusic } from "../images";
 export function registerCommandSearch(ctx: Context, config: Config) {
   // Search music by ID.
   ctx
-    .command("mai.search.id <id:number>")
+    .command("mai.search.id <id:posint>")
     .action(async ({ session }, id) => {
       // Check if the argument is properly provided.
       if (id === undefined) return session.text(".pleaseProvideId");

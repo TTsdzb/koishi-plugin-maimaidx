@@ -1,10 +1,16 @@
 commands:
+  # Command
+  # Base command of maimaidx
   mai:
     description: Maimai相关功能。
 
+    # Command
+    # Search music with given information
     search:
       description: 根据给定信息搜索歌曲。
 
+      # Command
+      # Search music with ID
       id:
         description: 使用歌曲的谱面ID查找歌曲。
         usage: |-
@@ -16,6 +22,8 @@ commands:
           pleaseProvideId: 请指定乐曲ID。
           songWithIdNotFound: 未找到ID为{0}的乐曲。
 
+      # Command
+      # Search music with title
       title:
         description: 通过歌曲标题搜索歌曲。
         usage: |-
@@ -26,71 +34,119 @@ commands:
         messages:
           pleaseProvideTitle: 请指定要搜索的标题。
           songWithTitleNotFound: 没有找到标题包含"{0}"的乐曲。
-          tooManyResults: 结果过多（{0}条），请使用更长的字段查询。
-          followingResultsFound: 找到以下结果，请使用ID查询单个乐曲信息：
 
+      # Command
+      # Search music with alias
       alias:
         description: 通过歌曲别名搜索歌曲。
 
+      # Command
+      # Search music with artist
       artist:
         description: 通过歌曲的曲师搜索歌曲。
 
+      # Command
+      # Search music with charter
       charter:
         description: 通过谱师搜索歌曲。
 
+      # Command
+      # Search music with bpm range
       bpm:
         description: 通过BPM范围搜索歌曲。
 
+      # Command
+      # Search music with chart base
       base:
         description: 通过谱面定数搜索歌曲。
 
+      # Message string definition
+      # Messages shared by multiple search commands
+      messages:
+        tooManyResults: 结果过多（{0}条），请使用更长的字段查询。
+        followingResultsFound: 找到以下结果，请使用ID查询单个乐曲信息：
+
+    # Command
+    # Query base table of a given difficulty
     base:
       description: 查询指定难度的定数表。
 
+    # Command
+    # Query scores of a player
     scores:
       description: 玩家分数查询相关功能。
 
+      # Command
+      # Query best 50
       b50:
         description: 查询玩家的B50。
 
+      # Command
+      # Query score of a single music
       single:
         description: 查询玩家的某单曲成绩。
 
+      # Command
+      # Query statistic information of a chart
       global:
         description: 查询某一谱面的统计信息。
 
+      # Command
+      # Query completion table of a given difficulty
       base:
         description: 查询某一难度的完成表。
 
+      # Command
+      # Query global rank
       rank:
         description: 查看玩家排行。
 
+    # Command
+    # Query progress of a player
     progress:
       description: 玩家进度查询相关功能。
 
+      # Command
+      # Query completions of a given difficulty
       level:
         description: 查询指定难度的进度。
 
+      # Command
+      # Query completions of a plate
       plate:
         description: 查询指定牌子的进度。
 
+    # Command
+    # Pick a song randomly
     random:
       description: 从曲库中随机一首乐曲。
 
+    # Command
+    # Daily mai
     fortune:
       description: 今日舞萌相关功能。
 
+      # Command
+      # Get today's daily mai
       today:
         description: 查询今日舞萌。
 
+      # Command
+      # Get tomorrow's daily mai
       tomorrow:
         description: 今天状态不佳？查查明日舞萌！
 
+    # Command
+    # Update information stored in the database
     update:
       description: 更新插件信息。
 
+      # Command
+      # Update song and chart information
       maimai:
         description: 更新舞萌的歌曲和谱面信息。一般只需在游戏更新，查分器适配完成后运行一次。重启Koishi也会自动更新。
 
+      # Command
+      # Update song alias
       alias:
         description: 更新歌曲的别名信息。插件会自动定时更新，一般无需手动运行。重启Koishi也会自动更新。

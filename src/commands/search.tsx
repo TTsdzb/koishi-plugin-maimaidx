@@ -62,7 +62,9 @@ export function registerCommandSearch(ctx: Context, config: Config) {
 
       // If there're too many results, prompt the user.
       if (musics.length >= 30)
-        return session.text(".tooManyResults", [musics.length]);
+        return session.text("commands.mai.search.messages.tooManyResults", [
+          musics.length,
+        ]);
 
       // There're more than one music but not too many, prompt the user.
       let results = [];
@@ -75,7 +77,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       });
       return (
         <>
-          <i18n path=".followingResultsFound" />
+          <i18n path="commands.mai.search.messages.followingResultsFound" />
           {results}
         </>
       );

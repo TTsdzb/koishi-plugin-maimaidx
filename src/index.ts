@@ -24,7 +24,7 @@ export const Config: Schema<Config> = Schema.object({
 
 export function apply(ctx: Context, config: Config) {
   const logger = new Logger("maimaidx");
-  logger.info(config);
+  logger.debug(config);
 
   // Register i18n
   ctx.i18n.define("zh-CN", require("./locales/zh-CN"));

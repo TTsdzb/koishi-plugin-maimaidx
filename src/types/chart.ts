@@ -83,6 +83,7 @@ export function extractChartInfo(
   stats: ApiChartStat[]
 ): ChartInfo[] {
   let charts: ChartInfo[] = [];
+  // The order of charts is essential so we use classic for loop.
   for (let i = 0; i < music.charts.length; i++) {
     charts.push(
       ChartInfo.parse({
@@ -118,13 +119,9 @@ export async function loadMusicAndChart(ctx: Context) {
 
     apiMusics.forEach((apiMusic) => {
       musics.push(extractMusicInfo(apiMusic));
-      charts = [
-        ...charts,
-        ...extractChartInfo(
-          apiMusic,
-          apiChartStats.charts[apiMusic.id.toString()]
-        ),
-      ];
+      charts = charts.concat(
+        extractChartInfo(apiMusic, apiChartStats.charts[apiMusic.id.toString()])
+      );
     });
   } catch (e) {
     logger.error(`Error occurred while loading data from API:`);

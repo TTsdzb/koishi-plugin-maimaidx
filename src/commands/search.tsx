@@ -70,14 +70,11 @@ export function registerCommandSearch(ctx: Context, config: Config) {
         );
 
       // There're more than one music but not too many, prompt the user.
-      let results = [];
-      musics.forEach((music) => {
-        results.push(
-          <p>
-            {music.id}: {music.title}
-          </p>
-        );
-      });
+      let results = musics.map((music) => (
+        <p>
+          {music.id}: {music.title}
+        </p>
+      ));
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
@@ -125,14 +122,11 @@ export function registerCommandSearch(ctx: Context, config: Config) {
         );
 
       // There're more than one music but not too many, prompt the user.
-      let results = [];
-      musics.forEach((music) => {
-        results.push(
-          <p>
-            {music.id}: {music.title}
-          </p>
-        );
-      });
+      let results = musics.map((music) => (
+        <p>
+          {music.id}: {music.title}
+        </p>
+      ));
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />

@@ -13,9 +13,9 @@ export function registerCommandSearch(ctx: Context, config: Config) {
   // Search music by ID.
   ctx
     .command("mai.search.id <id:posint>")
-    .action(async ({ session }, id) => {
+    .action(async (_, id) => {
       // Check if the argument is properly provided.
-      if (id === undefined) return session.text(".pleaseProvideId");
+      if (id === undefined) return <i18n path=".pleaseProvideId" />;
 
       // Query the database for music.
       const musics = await ctx.database.get("maimaidx.music_info", {
@@ -23,7 +23,8 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       });
 
       // Check if the queried music exists.
-      if (musics.length === 0) return session.text(".songWithIdNotFound", [id]);
+      if (musics.length === 0)
+        return <i18n path=".songWithIdNotFound">{[id]}</i18n>;
 
       // Draw and return information for the user.
       // There should be only one music when query by id.
@@ -38,9 +39,9 @@ export function registerCommandSearch(ctx: Context, config: Config) {
   // Search music by title.
   ctx
     .command("mai.search.title <title:text>")
-    .action(async ({ session }, title) => {
+    .action(async (_, title) => {
       // Check if the argument is properly provided.
-      if (title === undefined) return session.text(".pleaseProvideTitle");
+      if (title === undefined) return <i18n path=".pleaseProvideTitle" />;
 
       // Query the database for music.
       const musics = await ctx.database.get("maimaidx.music_info", {
@@ -49,7 +50,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
 
       // Check if the queried music exists.
       if (musics.length === 0)
-        return session.text(".songWithTitleNotFound", [title]);
+        return <i18n path=".songWithTitleNotFound">{[title]}</i18n>;
 
       // If there's only one music, return its information
       if (musics.length === 1) {
@@ -62,9 +63,11 @@ export function registerCommandSearch(ctx: Context, config: Config) {
 
       // If there're too many results, prompt the user.
       if (musics.length >= 30)
-        return session.text("commands.mai.search.messages.tooManyResults", [
-          musics.length,
-        ]);
+        return (
+          <i18n path="commands.mai.search.messages.tooManyResults">
+            {[musics.length]}
+          </i18n>
+        );
 
       // There're more than one music but not too many, prompt the user.
       let results = [];

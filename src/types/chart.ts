@@ -1,6 +1,12 @@
-import { Context } from "koishi";
+import { Context, Logger } from "koishi";
 import { z } from "zod";
-import { ApiChartStat, ApiMusic } from "./diving_fish";
+import {
+  ApiChartStat,
+  ApiMusic,
+  fetchMusic,
+  fetchChartStats,
+} from "./diving_fish";
+import { extractMusicInfo } from "./music";
 
 /**
  * Scheme representing information of a chart (谱面).
@@ -91,4 +97,49 @@ export function extractChartInfo(
     );
   }
   return charts;
+}
+
+/**
+ * Load music information and chart stats from Diving-fish.
+ *
+ * Some information of chart is stored in `ApiMusic`,
+ * so their loading function is bundled.
+ * @param ctx Context of koishi
+ */
+export async function loadMusicAndChart(ctx: Context) {
+  const logger = new Logger("maimaidx");
+
+  let musics = [];
+  let charts = [];
+
+  try {
+    const apiMusics = await fetchMusic(ctx);
+    const apiChartStats = await fetchChartStats(ctx);
+
+    apiMusics.forEach((apiMusic) => {
+      musics.push(extractMusicInfo(apiMusic));
+      charts = [
+        ...charts,
+        ...extractChartInfo(
+          apiMusic,
+          apiChartStats.charts[apiMusic.id.toString()]
+        ),
+      ];
+    });
+  } catch (e) {
+    logger.error(`Error occurred while loading data from API:`);
+    logger.error(e);
+    logger.warn(
+      "Switching to caches in the database. Note that if this is your first time using this plugin, you will encounter problems."
+    );
+    return;
+  }
+
+  await ctx.database.remove("maimaidx.chart_info", {});
+  await ctx.database.remove("maimaidx.music_info", {});
+
+  await ctx.database.upsert("maimaidx.music_info", musics);
+  await ctx.database.upsert("maimaidx.chart_info", charts);
+
+  logger.info("Maimai data loaded.");
 }

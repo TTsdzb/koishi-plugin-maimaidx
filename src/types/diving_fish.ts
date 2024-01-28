@@ -65,7 +65,7 @@ export type ApiChartStats = z.infer<typeof ApiChartStats>;
  * @param ctx Context object of Koishi
  * @returns Fetched music list
  */
-export async function loadMusic(ctx: Context): Promise<ApiMusic[]> {
+export async function fetchMusic(ctx: Context): Promise<ApiMusic[]> {
   return ApiMusic.array().parse(
     await ctx.http.get(
       "https://www.diving-fish.com/api/maimaidxprober/music_data"
@@ -78,7 +78,7 @@ export async function loadMusic(ctx: Context): Promise<ApiMusic[]> {
  * @param ctx Context object of Koishi
  * @returns Fetched chart stats
  */
-export async function loadChartStats(ctx: Context): Promise<ApiChartStats> {
+export async function fetchChartStats(ctx: Context): Promise<ApiChartStats> {
   return ApiChartStats.parse(
     await ctx.http.get<ApiChartStats>(
       "https://www.diving-fish.com/api/maimaidxprober/chart_stats"

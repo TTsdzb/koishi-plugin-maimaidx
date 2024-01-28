@@ -39,6 +39,14 @@ commands:
       # Search music with alias
       alias:
         description: 通过歌曲别名搜索歌曲。
+        usage: |-
+          你也可以直接使用该命令的快捷匹配：&lt;别名&gt;是什么歌
+        examples: |-
+          /mai.search.alias 潘
+          潘是什么歌
+        messages:
+          pleaseProvideAlias: 请指定要搜索的别名。
+          songWithAliasNotFound: 没有找到别名为"{0}"的乐曲。
 
       # Command
       # Search music with artist

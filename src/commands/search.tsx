@@ -45,7 +45,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
 
       // Query the database for music.
       const musics = await ctx.database.get("maimaidx.music_info", {
-        title: { $regex: `.*${title}.*` },
+        title: { $regex: `${title}` },
       });
 
       // Check if the queried music exists.
@@ -86,4 +86,59 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       );
     })
     .shortcut(/^查歌\s?(.+)$/i, { args: ["$1"] });
+
+  // Search music by alias.
+  ctx
+    .command("mai.search.alias <alias:text>")
+    .action(async (_, alias) => {
+      // Check if the argument is properly provided.
+      if (alias === undefined) return <i18n path=".pleaseProvideAlias" />;
+
+      // Query the database for music.
+      const musicAliases = await ctx.database.get("maimaidx.alias", {
+        alias: { $regex: `^${alias}$` },
+      });
+      const musics = await ctx.database.get(
+        "maimaidx.music_info",
+        musicAliases.map((alias) => alias.music)
+      );
+
+      // Check if the queried music exists.
+      if (musics.length === 0)
+        return <i18n path=".songWithAliasNotFound">{[alias]}</i18n>;
+
+      // If there's only one music, return its information
+      if (musics.length === 1) {
+        const charts = await ctx.database.get("maimaidx.chart_info", {
+          music: musics[0].id,
+        });
+
+        return drawMusic(config, musics[0], charts);
+      }
+
+      // If there're too many results, prompt the user.
+      if (musics.length >= 30)
+        return (
+          <i18n path="commands.mai.search.messages.tooManyResults">
+            {[musics.length]}
+          </i18n>
+        );
+
+      // There're more than one music but not too many, prompt the user.
+      let results = [];
+      musics.forEach((music) => {
+        results.push(
+          <p>
+            {music.id}: {music.title}
+          </p>
+        );
+      });
+      return (
+        <>
+          <i18n path="commands.mai.search.messages.followingResultsFound" />
+          {results}
+        </>
+      );
+    })
+    .shortcut(/^(.+)是什么歌$/i, { args: ["$1"] });
 }

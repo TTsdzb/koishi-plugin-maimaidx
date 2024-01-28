@@ -52,6 +52,14 @@ commands:
       # Search music with artist
       artist:
         description: 通过歌曲的曲师搜索歌曲。
+        usage: |-
+          你也可以直接使用该命令的快捷匹配：曲师查歌&lt;曲师名&gt;
+        examples: |-
+          /mai.search.artist 削除
+          曲师查歌削除
+        messages:
+          pleaseProvideArtist: 请指定要搜索的曲师。
+          songWithArtistNotFound: 没有找到曲师名包含"{0}"的乐曲。
 
       # Command
       # Search music with charter
@@ -73,6 +81,8 @@ commands:
       messages:
         tooManyResults: 结果过多（{0}条），请使用更长的字段查询。
         followingResultsFound: 找到以下结果，请使用ID查询单个乐曲信息：
+        page: 第{0}页，共{1}页
+        pageOverflow: 数据共{1}页，不存在第{0}页。
 
     # Command
     # Query base table of a given difficulty

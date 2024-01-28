@@ -1,4 +1,4 @@
-import { Context, escapeRegExp } from "koishi";
+import { Context, escapeRegExp, $ } from "koishi";
 import { Config } from "..";
 import { drawMusic } from "../images";
 
@@ -10,6 +10,8 @@ import { drawMusic } from "../images";
  * @param config Config object of the plugin
  */
 export function registerCommandSearch(ctx: Context, config: Config) {
+  const itemPerPage = 30;
+
   // Search music by ID.
   ctx
     .command("mai.search.id <id:posint>")
@@ -24,7 +26,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
 
       // Check if the queried music exists.
       if (musics.length === 0)
-        return <i18n path=".songWithIdNotFound">{[id]}</i18n>;
+        return <i18n path=".songWithIdNotFound">{id}</i18n>;
 
       // Draw and return information for the user.
       // There should be only one music when query by id.
@@ -50,7 +52,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
 
       // Check if the queried music exists.
       if (musics.length === 0)
-        return <i18n path=".songWithTitleNotFound">{[title]}</i18n>;
+        return <i18n path=".songWithTitleNotFound">{title}</i18n>;
 
       // If there's only one music, return its information
       if (musics.length === 1) {
@@ -65,7 +67,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       if (musics.length >= 30)
         return (
           <i18n path="commands.mai.search.messages.tooManyResults">
-            {[musics.length]}
+            {musics.length}
           </i18n>
         );
 
@@ -102,7 +104,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
 
       // Check if the queried music exists.
       if (musics.length === 0)
-        return <i18n path=".songWithAliasNotFound">{[alias]}</i18n>;
+        return <i18n path=".songWithAliasNotFound">{alias}</i18n>;
 
       // If there's only one music, return its information
       if (musics.length === 1) {
@@ -117,7 +119,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       if (musics.length >= 30)
         return (
           <i18n path="commands.mai.search.messages.tooManyResults">
-            {[musics.length]}
+            {musics.length}
           </i18n>
         );
 
@@ -135,4 +137,76 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       );
     })
     .shortcut(/^(.+)是什么歌$/i, { args: ["$1"] });
+
+  // Search music by artist.
+  ctx
+    .command("mai.search.artist <artist:text>")
+    .option("page", "-p [page:posint]", { fallback: 1 })
+    .action(async ({ options, session }, artist) => {
+      // Check if the argument is properly provided.
+      if (artist === undefined) return <i18n path=".pleaseProvideArtist" />;
+      const page = options.page;
+
+      // Count all items and check if queried
+      // music exists.
+      const items = await ctx.database
+        .select("maimaidx.music_info")
+        .where({
+          artist: { $regex: escapeRegExp(artist) },
+        })
+        .execute((row) => $.count(row.id));
+      if (items === 0)
+        return <i18n path=".songWithArtistNotFound">{artist}</i18n>;
+
+      // Count pages and check if overflow
+      const totalPages = Math.ceil(items / itemPerPage);
+      if (page > totalPages)
+        return (
+          <i18n path="commands.mai.search.messages.pageOverflow">
+            <>{page}</>
+            <>{totalPages}</>
+          </i18n>
+        );
+
+      // Query the database for music.
+      const musics = await ctx.database
+        .select("maimaidx.music_info")
+        .where({
+          artist: { $regex: escapeRegExp(artist) },
+        })
+        .limit(itemPerPage)
+        .offset((page - 1) * itemPerPage)
+        .execute();
+
+      // If there's only one music, return its information
+      if (musics.length === 1) {
+        const charts = await ctx.database.get("maimaidx.chart_info", {
+          music: musics[0].id,
+        });
+
+        return drawMusic(config, musics[0], charts);
+      }
+
+      // Return paged search result
+      let results = musics.map((music) => (
+        <p>
+          {music.id}: {music.title}
+        </p>
+      ));
+      return (
+        <>
+          <i18n path="commands.mai.search.messages.followingResultsFound" />
+          {results}
+          <i18n path="commands.mai.search.messages.page">
+            <>{page}</>
+            <>{totalPages}</>
+          </i18n>
+        </>
+      );
+    })
+    .shortcut(/^曲师查歌\s?(.+)\s(\d+)$/i, {
+      args: ["$1"],
+      options: { page: "$2" },
+    })
+    .shortcut(/^曲师查歌\s?(.+)$/i, { args: ["$1"] });
 }

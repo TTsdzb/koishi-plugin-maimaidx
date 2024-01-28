@@ -1,4 +1,4 @@
-import { Context } from "koishi";
+import { Context, escapeRegExp } from "koishi";
 import { Config } from "..";
 import { drawMusic } from "../images";
 
@@ -45,7 +45,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
 
       // Query the database for music.
       const musics = await ctx.database.get("maimaidx.music_info", {
-        title: { $regex: `${title}` },
+        title: { $regex: escapeRegExp(title) },
       });
 
       // Check if the queried music exists.
@@ -96,7 +96,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
 
       // Query the database for music.
       const musicAliases = await ctx.database.get("maimaidx.alias", {
-        alias: { $regex: `^${alias}$` },
+        alias: { $regex: `^${escapeRegExp(alias)}$` },
       });
       const musics = await ctx.database.get(
         "maimaidx.music_info",

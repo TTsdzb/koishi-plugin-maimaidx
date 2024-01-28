@@ -45,7 +45,7 @@ declare module "koishi" {
 
 /**
  * Extend table `maimaidx.chart_info` on the given context.
- * @param ctx The context of koishi
+ * @param ctx The context of Koishi
  */
 export function extendChartInfo(ctx: Context) {
   ctx.model.extend(
@@ -104,7 +104,7 @@ export function extractChartInfo(
  *
  * Some information of chart is stored in `ApiMusic`,
  * so their loading function is bundled.
- * @param ctx Context of koishi
+ * @param ctx Context of Koishi
  */
 export async function loadMusicAndChart(ctx: Context) {
   const logger = new Logger("maimaidx");

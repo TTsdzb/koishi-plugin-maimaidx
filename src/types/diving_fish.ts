@@ -80,7 +80,7 @@ export async function fetchMusic(ctx: Context): Promise<ApiMusic[]> {
  */
 export async function fetchChartStats(ctx: Context): Promise<ApiChartStats> {
   return ApiChartStats.parse(
-    await ctx.http.get<ApiChartStats>(
+    await ctx.http.get(
       "https://www.diving-fish.com/api/maimaidxprober/chart_stats"
     )
   );

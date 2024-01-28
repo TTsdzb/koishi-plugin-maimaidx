@@ -37,7 +37,7 @@ declare module "koishi" {
 
 /**
  * Extend table `maimaidx.music_info` on the given context.
- * @param ctx The context of koishi
+ * @param ctx The context of Koishi
  */
 export function extendMusicInfo(ctx: Context) {
   ctx.model.extend(

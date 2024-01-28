@@ -7,17 +7,19 @@ import { z } from "zod";
  * This will be converted into another scheme
  * before storing into database.
  */
-export const XrayApiAlias = z.record(z.string().array());
+export const XrayApiAliases = z.record(z.string().array());
 
-export type XrayApiAlias = z.infer<typeof XrayApiAlias>;
+export type XrayApiAliases = z.infer<typeof XrayApiAliases>;
 
 /**
  * Get all music alias from Xray API.
  * @param ctx Context object of Koishi
  * @returns Fetched alias record
  */
-export async function fetchXrayMusicAlias(ctx: Context): Promise<XrayApiAlias> {
-  return XrayApiAlias.parse(
+export async function fetchXrayMusicAliases(
+  ctx: Context
+): Promise<XrayApiAliases> {
+  return XrayApiAliases.parse(
     await ctx.http.get("https://download.fanyu.site/maimai/alias.json")
   );
 }

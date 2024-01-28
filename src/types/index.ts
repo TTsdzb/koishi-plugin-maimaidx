@@ -3,6 +3,7 @@
  * and all of their related functions.
  */
 
+export * from "./alias";
 export * from "./chart";
 export * from "./diving_fish";
 export * from "./music";

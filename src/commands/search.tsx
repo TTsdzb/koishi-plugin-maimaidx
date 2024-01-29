@@ -84,7 +84,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
         );
 
       // There're more than one music but not too many, prompt the user.
-      let results = musics.map((music) => (
+      const results = musics.map((music) => (
         <p>
           {music.id}: {music.title}
         </p>
@@ -141,7 +141,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
         );
 
       // There're more than one music but not too many, prompt the user.
-      let results = musics.map((music) => (
+      const results = musics.map((music) => (
         <p>
           {music.id}: {music.title}
         </p>
@@ -159,7 +159,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
   ctx
     .command("mai.search.artist <artist:text>")
     .option("page", "-p [page:posint]", { fallback: 1 })
-    .action(async ({ options, session }, artist) => {
+    .action(async ({ options }, artist) => {
       // Check if the argument is properly provided.
       if (artist === undefined) return <i18n path=".pleaseProvideArtist" />;
       const page = options.page;
@@ -210,7 +210,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       }
 
       // Return paged search result
-      let results = musics.map((music) => (
+      const results = musics.map((music) => (
         <p>
           {music.id}: {music.title}
         </p>
@@ -231,4 +231,133 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       options: { page: "$2" },
     })
     .shortcut(/^曲师查歌\s?(.+)$/i, { args: ["$1"] });
+
+  // Search music by charter.
+  ctx
+    .command("mai.search.charter <charter:text>")
+    .option("page", "-p [page:posint]", { fallback: 1 })
+    .action(async ({ options }, charter) => {
+      // Check if the argument is properly provided.
+      if (charter === undefined) return <i18n path=".pleaseProvideCharter" />;
+      const page = options.page;
+
+      // Count all items and check if queried
+      // music exists.
+      const items = await ctx.database
+        .select("maimaidx.chart_info")
+        .where({
+          charter: { $regex: escapeRegExp(charter) },
+        })
+        .execute((row) => $.count(row.id));
+      if (items === 0)
+        return <i18n path=".songWithCharterNotFound">{charter}</i18n>;
+
+      // Count pages and check if overflow
+      const totalPages = Math.ceil(items / itemPerPage);
+      if (page > totalPages)
+        return (
+          <i18n path="commands.mai.search.messages.pageOverflow">
+            <>{page}</>
+            <>{totalPages}</>
+          </i18n>
+        );
+
+      // Query the database for music.
+      const musics = await ctx.database
+        .join(
+          {
+            t1: "maimaidx.music_info",
+            t2: "maimaidx.chart_info",
+          },
+          ({ t1, t2 }) => $.eq(t1.id, t2.music)
+        )
+        .where({
+          "t2.charter": { $regex: escapeRegExp(charter) },
+        })
+        .orderBy((row) => row.t1.id)
+        .limit(itemPerPage)
+        .offset((page - 1) * itemPerPage)
+        .execute();
+
+      // If there's only one music, return its information
+      if (musics.length === 1) {
+        const charts = await ctx.database
+          .select("maimaidx.chart_info")
+          .where({
+            music: musics[0].t1.id,
+          })
+          .orderBy("order")
+          .execute();
+
+        return drawMusic(config, musics[0].t1, charts);
+      }
+
+      // Return paged search result
+      const backgroundColors = [
+        "#6fd43d",
+        "#f8b709",
+        "#ff818d",
+        "#9f51dc",
+        "#dbaaff",
+      ];
+      const results = musics.map((music) => (
+        <tr
+          style={`background-color: ${backgroundColors[music.t2.order]}; ${
+            music.t2.order === 4 ? "color: #8c2cd5;" : ""
+          }`}
+        >
+          <td style="font-family: torus">{music.t1.id}</td>
+          <td>{music.t1.title}</td>
+          <td>{music.t2.charter}</td>
+        </tr>
+      ));
+      return (
+        <>
+          <i18n path="commands.mai.search.messages.followingResultsFound" />
+          <html>
+            <head>
+              <style>
+                {`
+                  td {
+                    padding: 0.5em 2em;
+                  }
+                  table,
+                  th,
+                  td {
+                    border: 2px solid #c473ff;
+                  }
+                  @font-face {
+                    font-family: "torus";
+                    src: url("${config.assetsPath}/Torus SemiBold.otf");
+                  }
+                  @font-face {
+                    font-family: "siyuan";
+                    src: url("${config.assetsPath}/SourceHanSansSC-Bold.otf");
+                  }
+                `}
+              </style>
+            </head>
+            <table style="font-size: 20px; border-collapse: collapse">
+              <thead style="font-family: siyuan; color: #8c2cd5">
+                <tr>
+                  <th>乐曲ID</th>
+                  <th>曲名</th>
+                  <th>谱师</th>
+                </tr>
+              </thead>
+              <tbody style="font-family: siyuan; color: white">{results}</tbody>
+            </table>
+          </html>
+          <i18n path="commands.mai.search.messages.page">
+            <>{page}</>
+            <>{totalPages}</>
+          </i18n>
+        </>
+      );
+    })
+    .shortcut(/^谱师查歌\s?(.+)\s(\d+)$/i, {
+      args: ["$1"],
+      options: { page: "$2" },
+    })
+    .shortcut(/^谱师查歌\s?(.+)$/i, { args: ["$1"] });
 }

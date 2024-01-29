@@ -66,6 +66,15 @@ commands:
       # Search music with charter
       charter:
         description: 通过谱师搜索歌曲。
+        usage: |-
+          你也可以直接使用该命令的快捷匹配：谱师查歌&lt;谱师名&gt; [页数]
+        examples: |-
+          /mai.search.charter 譜面-100号
+          谱师查歌譜面-100号
+          谱师查歌譜面-100号 2
+        messages:
+          pleaseProvideCharter: 请指定要搜索的谱师。
+          songWithCharterNotFound: 没有找到谱师名包含"{0}"的乐曲。
 
       # Command
       # Search music with bpm range

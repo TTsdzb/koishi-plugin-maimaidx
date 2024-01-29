@@ -53,10 +53,11 @@ commands:
       artist:
         description: 通过歌曲的曲师搜索歌曲。
         usage: |-
-          你也可以直接使用该命令的快捷匹配：曲师查歌&lt;曲师名&gt;
+          你也可以直接使用该命令的快捷匹配：曲师查歌&lt;曲师名&gt; [页数]
         examples: |-
           /mai.search.artist 削除
           曲师查歌削除
+          曲师查歌a 2
         messages:
           pleaseProvideArtist: 请指定要搜索的曲师。
           songWithArtistNotFound: 没有找到曲师名包含"{0}"的乐曲。

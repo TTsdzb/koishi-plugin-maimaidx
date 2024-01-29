@@ -30,9 +30,13 @@ export function registerCommandSearch(ctx: Context, config: Config) {
 
       // Draw and return information for the user.
       // There should be only one music when query by id.
-      const charts = await ctx.database.get("maimaidx.chart_info", {
-        music: id,
-      });
+      const charts = await ctx.database
+        .select("maimaidx.chart_info")
+        .where({
+          music: id,
+        })
+        .orderBy("order")
+        .execute();
 
       return drawMusic(config, musics[0], charts);
     })
@@ -46,9 +50,13 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       if (title === undefined) return <i18n path=".pleaseProvideTitle" />;
 
       // Query the database for music.
-      const musics = await ctx.database.get("maimaidx.music_info", {
-        title: { $regex: escapeRegExp(title) },
-      });
+      const musics = await ctx.database
+        .select("maimaidx.music_info")
+        .where({
+          title: { $regex: escapeRegExp(title) },
+        })
+        .orderBy("id")
+        .execute();
 
       // Check if the queried music exists.
       if (musics.length === 0)
@@ -56,9 +64,13 @@ export function registerCommandSearch(ctx: Context, config: Config) {
 
       // If there's only one music, return its information
       if (musics.length === 1) {
-        const charts = await ctx.database.get("maimaidx.chart_info", {
-          music: musics[0].id,
-        });
+        const charts = await ctx.database
+          .select("maimaidx.chart_info")
+          .where({
+            music: musics[0].id,
+          })
+          .orderBy("order")
+          .execute();
 
         return drawMusic(config, musics[0], charts);
       }
@@ -97,10 +109,11 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       const musicAliases = await ctx.database.get("maimaidx.alias", {
         alias: { $regex: `^${escapeRegExp(alias)}$` },
       });
-      const musics = await ctx.database.get(
-        "maimaidx.music_info",
-        musicAliases.map((alias) => alias.music)
-      );
+      const musics = await ctx.database
+        .select("maimaidx.music_info")
+        .where(musicAliases.map((alias) => alias.music))
+        .orderBy("id")
+        .execute();
 
       // Check if the queried music exists.
       if (musics.length === 0)
@@ -108,9 +121,13 @@ export function registerCommandSearch(ctx: Context, config: Config) {
 
       // If there's only one music, return its information
       if (musics.length === 1) {
-        const charts = await ctx.database.get("maimaidx.chart_info", {
-          music: musics[0].id,
-        });
+        const charts = await ctx.database
+          .select("maimaidx.chart_info")
+          .where({
+            music: musics[0].id,
+          })
+          .orderBy("order")
+          .execute();
 
         return drawMusic(config, musics[0], charts);
       }
@@ -174,15 +191,20 @@ export function registerCommandSearch(ctx: Context, config: Config) {
         .where({
           artist: { $regex: escapeRegExp(artist) },
         })
+        .orderBy("id")
         .limit(itemPerPage)
         .offset((page - 1) * itemPerPage)
         .execute();
 
       // If there's only one music, return its information
       if (musics.length === 1) {
-        const charts = await ctx.database.get("maimaidx.chart_info", {
-          music: musics[0].id,
-        });
+        const charts = await ctx.database
+          .select("maimaidx.chart_info")
+          .where({
+            music: musics[0].id,
+          })
+          .orderBy("order")
+          .execute();
 
         return drawMusic(config, musics[0], charts);
       }

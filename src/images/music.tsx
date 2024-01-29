@@ -23,21 +23,17 @@ export function drawMusicSimple(
   music: MusicInfo,
   charts: ChartInfo[]
 ): h {
-  let chartsH = [];
-
-  charts.forEach((chart) => {
-    chartsH.push(
-      <p
-        style={
-          chart.order === 4
-            ? "width: 82px; margin: 0 13px 0 0; color: rgb(195, 70, 231)"
-            : "width: 82px; margin: 0 13px 0 0"
-        }
-      >
-        {chart.ds.toFixed(1)}
-      </p>
-    );
-  });
+  let chartsH = charts.map((chart) => (
+    <p
+      style={
+        chart.order === 4
+          ? "width: 82px; margin: 0 13px 0 0; color: rgb(195, 70, 231)"
+          : "width: 82px; margin: 0 13px 0 0"
+      }
+    >
+      {chart.ds.toFixed(1)}
+    </p>
+  ));
 
   return (
     <html

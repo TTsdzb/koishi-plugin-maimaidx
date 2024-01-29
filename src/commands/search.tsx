@@ -132,15 +132,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
         return drawMusic(config, musics[0], charts);
       }
 
-      // If there're too many results, prompt the user.
-      if (musics.length >= 30)
-        return (
-          <i18n path="commands.mai.search.messages.tooManyResults">
-            {musics.length}
-          </i18n>
-        );
-
-      // There're more than one music but not too many, prompt the user.
+      // There're more than one music, prompt the user.
       const results = musics.map((music) => (
         <p>
           {music.id}: {music.title}
@@ -195,19 +187,6 @@ export function registerCommandSearch(ctx: Context, config: Config) {
         .limit(itemPerPage)
         .offset((page - 1) * itemPerPage)
         .execute();
-
-      // If there's only one music, return its information
-      if (musics.length === 1) {
-        const charts = await ctx.database
-          .select("maimaidx.chart_info")
-          .where({
-            music: musics[0].id,
-          })
-          .orderBy("order")
-          .execute();
-
-        return drawMusic(config, musics[0], charts);
-      }
 
       // Return paged search result
       const results = musics.map((music) => (
@@ -278,19 +257,6 @@ export function registerCommandSearch(ctx: Context, config: Config) {
         .limit(itemPerPage)
         .offset((page - 1) * itemPerPage)
         .execute();
-
-      // If there's only one music, return its information
-      if (musics.length === 1) {
-        const charts = await ctx.database
-          .select("maimaidx.chart_info")
-          .where({
-            music: musics[0].t1.id,
-          })
-          .orderBy("order")
-          .execute();
-
-        return drawMusic(config, musics[0].t1, charts);
-      }
 
       // Return paged search result
       const backgroundColors = [

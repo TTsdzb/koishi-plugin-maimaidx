@@ -1,6 +1,6 @@
 import { Context, escapeRegExp, $ } from "koishi";
 import { Config } from "..";
-import { drawMusic } from "../images";
+import { drawMusic, drawSearchResultsWithChart } from "../images";
 
 /**
  * Provide search command.
@@ -245,75 +245,24 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       const musics = await ctx.database
         .join(
           {
-            t1: "maimaidx.music_info",
-            t2: "maimaidx.chart_info",
+            musicInfo: "maimaidx.music_info",
+            chart: "maimaidx.chart_info",
           },
-          ({ t1, t2 }) => $.eq(t1.id, t2.music)
+          ({ musicInfo, chart }) => $.eq(musicInfo.id, chart.music)
         )
         .where({
-          "t2.charter": { $regex: escapeRegExp(charter) },
+          "chart.charter": { $regex: escapeRegExp(charter) },
         })
-        .orderBy((row) => row.t1.id)
+        .orderBy((row) => row.musicInfo.id)
         .limit(itemPerPage)
         .offset((page - 1) * itemPerPage)
         .execute();
 
       // Return paged search result
-      const backgroundColors = [
-        "#6fd43d",
-        "#f8b709",
-        "#ff818d",
-        "#9f51dc",
-        "#dbaaff",
-      ];
-      const results = musics.map((music) => (
-        <tr
-          style={`background-color: ${backgroundColors[music.t2.order]}; ${
-            music.t2.order === 4 ? "color: #8c2cd5;" : ""
-          }`}
-        >
-          <td style="font-family: torus">{music.t1.id}</td>
-          <td>{music.t1.title}</td>
-          <td>{music.t2.charter}</td>
-        </tr>
-      ));
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          <html>
-            <head>
-              <style>
-                {`
-                  td {
-                    padding: 0.5em 2em;
-                  }
-                  table,
-                  th,
-                  td {
-                    border: 2px solid #c473ff;
-                  }
-                  @font-face {
-                    font-family: "torus";
-                    src: url("${config.assetsPath}/Torus SemiBold.otf");
-                  }
-                  @font-face {
-                    font-family: "siyuan";
-                    src: url("${config.assetsPath}/SourceHanSansSC-Bold.otf");
-                  }
-                `}
-              </style>
-            </head>
-            <table style="font-size: 20px; border-collapse: collapse">
-              <thead style="font-family: siyuan; color: #8c2cd5">
-                <tr>
-                  <th>乐曲ID</th>
-                  <th>曲名</th>
-                  <th>谱师</th>
-                </tr>
-              </thead>
-              <tbody style="font-family: siyuan; color: white">{results}</tbody>
-            </table>
-          </html>
+          {drawSearchResultsWithChart(config, musics)}
           <i18n path="commands.mai.search.messages.page">
             <>{page}</>
             <>{totalPages}</>

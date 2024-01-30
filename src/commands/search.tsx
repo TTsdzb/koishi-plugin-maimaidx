@@ -1,6 +1,11 @@
 import { Context, escapeRegExp, $ } from "koishi";
 import { Config } from "..";
-import { drawMusic, drawSearchResultsWithChart } from "../images";
+import {
+  drawMusic,
+  drawSearchResults,
+  drawSearchResultsWithArtist,
+  drawSearchResultsWithChart,
+} from "../images";
 
 /**
  * Provide search command.
@@ -84,15 +89,10 @@ export function registerCommandSearch(ctx: Context, config: Config) {
         );
 
       // There're more than one music but not too many, prompt the user.
-      const results = musics.map((music) => (
-        <p>
-          {music.id}: {music.title}
-        </p>
-      ));
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {results}
+          {drawSearchResults(config, musics)}
         </>
       );
     })
@@ -133,15 +133,10 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       }
 
       // There're more than one music, prompt the user.
-      const results = musics.map((music) => (
-        <p>
-          {music.id}: {music.title}
-        </p>
-      ));
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {results}
+          {drawSearchResults(config, musics)}
         </>
       );
     })
@@ -189,15 +184,10 @@ export function registerCommandSearch(ctx: Context, config: Config) {
         .execute();
 
       // Return paged search result
-      const results = musics.map((music) => (
-        <p>
-          {music.id}: {music.title}
-        </p>
-      ));
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {results}
+          {drawSearchResultsWithArtist(config, musics)}
           <i18n path="commands.mai.search.messages.page">
             <>{page}</>
             <>{totalPages}</>

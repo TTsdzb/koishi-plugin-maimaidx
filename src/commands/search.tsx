@@ -240,9 +240,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
           },
           ({ musicInfo, chart }) => $.eq(musicInfo.id, chart.music)
         )
-        .where({
-          "chart.charter": { $regex: escapeRegExp(charter) },
-        })
+        .where((row) => $.regex(row.chart.charter, escapeRegExp(charter)))
         .orderBy((row) => row.musicInfo.id)
         .limit(itemPerPage)
         .offset((page - 1) * itemPerPage)

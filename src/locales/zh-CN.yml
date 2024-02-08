@@ -80,6 +80,15 @@ commands:
       # Search music with bpm range
       bpm:
         description: 通过BPM范围搜索歌曲。
+        usage: |-
+          你也可以直接使用该命令的快捷匹配：BPM查歌&lt;下限&gt; &lt;上限&gt; [页数]
+        examples: |-
+          /mai.search.bpm 100 200
+          BPM查歌100 200
+          BPM查歌100 200 2
+        messages:
+          pleaseProvideBpmBounds: 请指定BPM下限与上限。
+          songWithBpmNotFound: 没有找到BPM在{0}~{1}之间的乐曲。
 
       # Command
       # Search music with chart base

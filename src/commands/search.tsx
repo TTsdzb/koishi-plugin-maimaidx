@@ -4,6 +4,7 @@ import {
   drawMusic,
   drawSearchResults,
   drawSearchResultsWithArtist,
+  drawSearchResultsWithBpm,
   drawSearchResultsWithChart,
 } from "../images";
 
@@ -263,4 +264,69 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       options: { page: "$2" },
     })
     .shortcut(/^谱师查歌\s?(.+)$/i, { args: ["$1"] });
+
+  // Search music by BPM.
+  ctx
+    .command("mai.search.bpm <low:posint> <high:posint>")
+    .option("page", "-p [page:posint]", { fallback: 1 })
+    .action(async ({ options }, low, high) => {
+      // Check if the argument is properly provided.
+      if (low === undefined || high === undefined)
+        return <i18n path=".pleaseProvideBpmBounds" />;
+      const page = options.page;
+
+      // Count all items and check if queried
+      // music exists.
+      const items = await ctx.database
+        .select("maimaidx.music_info")
+        .where({
+          bpm: { $gte: low, $lte: high },
+        })
+        .execute((row) => $.count(row.id));
+      if (items === 0)
+        return (
+          <i18n path=".songWithBpmNotFound">
+            <>{low}</>
+            <>{high}</>
+          </i18n>
+        );
+
+      // Count pages and check if overflow
+      const totalPages = Math.ceil(items / itemPerPage);
+      if (page > totalPages)
+        return (
+          <i18n path="commands.mai.search.messages.pageOverflow">
+            <>{page}</>
+            <>{totalPages}</>
+          </i18n>
+        );
+
+      // Query the database for music.
+      const musics = await ctx.database
+        .select("maimaidx.music_info")
+        .where({
+          bpm: { $gte: low, $lte: high },
+        })
+        .orderBy("id")
+        .limit(itemPerPage)
+        .offset((page - 1) * itemPerPage)
+        .execute();
+
+      // Return paged search result
+      return (
+        <>
+          <i18n path="commands.mai.search.messages.followingResultsFound" />
+          {drawSearchResultsWithBpm(config, musics)}
+          <i18n path="commands.mai.search.messages.page">
+            <>{page}</>
+            <>{totalPages}</>
+          </i18n>
+        </>
+      );
+    })
+    .shortcut(/^BPM查歌\s?(\d+)\s(\d+)\s(\d+)$/i, {
+      args: ["$1", "$2"],
+      options: { page: "$3" },
+    })
+    .shortcut(/^BPM查歌\s?(\d+)\s(\d+)$/i, { args: ["$1", "$2"] });
 }

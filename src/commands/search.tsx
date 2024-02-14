@@ -1,5 +1,4 @@
 import { Context, escapeRegExp, $ } from "koishi";
-import { Config } from "..";
 
 /**
  * Provide search command.
@@ -8,7 +7,7 @@ import { Config } from "..";
  * @param ctx The context of koishi
  * @param config Config object of the plugin
  */
-export function registerCommandSearch(ctx: Context, config: Config) {
+export function registerCommandSearch(ctx: Context) {
   const itemPerPage = 30;
 
   // Search music by ID.

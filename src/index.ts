@@ -1,7 +1,7 @@
 import { Context, Logger, Schema } from "koishi";
 import { extendDatabase, loadData } from "./database";
-import { registerCommands } from "./commands";
 import MaimaidxImages from "./images";
+import * as commands from "./commands";
 
 export const name = "maimaidx";
 export const inject = ["database"];
@@ -42,5 +42,5 @@ export function apply(ctx: Context, config: Config) {
   });
 
   // Register commands provided by plugin
-  registerCommands(ctx, config);
+  ctx.plugin(commands);
 }

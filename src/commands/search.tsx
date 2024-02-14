@@ -1,12 +1,5 @@
 import { Context, escapeRegExp, $ } from "koishi";
 import { Config } from "..";
-import {
-  drawMusic,
-  drawSearchResults,
-  drawSearchResultsWithArtist,
-  drawSearchResultsWithBpm,
-  drawSearchResultsWithChart,
-} from "../images";
 
 /**
  * Provide search command.
@@ -44,7 +37,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
         .orderBy("order")
         .execute();
 
-      return drawMusic(config, musics[0], charts);
+      return ctx.maimaidxImages.drawMusic(musics[0], charts);
     })
     .shortcut(/^id\s?(\d{1,5})$/i, { args: ["$1"] });
 
@@ -78,7 +71,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
           .orderBy("order")
           .execute();
 
-        return drawMusic(config, musics[0], charts);
+        return ctx.maimaidxImages.drawMusic(musics[0], charts);
       }
 
       // If there're too many results, prompt the user.
@@ -93,7 +86,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {drawSearchResults(config, musics)}
+          {ctx.maimaidxImages.drawSearchResults(musics)}
         </>
       );
     })
@@ -130,14 +123,14 @@ export function registerCommandSearch(ctx: Context, config: Config) {
           .orderBy("order")
           .execute();
 
-        return drawMusic(config, musics[0], charts);
+        return ctx.maimaidxImages.drawMusic(musics[0], charts);
       }
 
       // There're more than one music, prompt the user.
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {drawSearchResults(config, musics)}
+          {ctx.maimaidxImages.drawSearchResults(musics)}
         </>
       );
     })
@@ -188,7 +181,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {drawSearchResultsWithArtist(config, musics)}
+          {ctx.maimaidxImages.drawSearchResultsWithArtist(musics)}
           <i18n path="commands.mai.search.messages.page">
             <>{page}</>
             <>{totalPages}</>
@@ -251,7 +244,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {drawSearchResultsWithChart(config, musics)}
+          {ctx.maimaidxImages.drawSearchResultsWithChart(musics)}
           <i18n path="commands.mai.search.messages.page">
             <>{page}</>
             <>{totalPages}</>
@@ -316,7 +309,7 @@ export function registerCommandSearch(ctx: Context, config: Config) {
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {drawSearchResultsWithBpm(config, musics)}
+          {ctx.maimaidxImages.drawSearchResultsWithBpm(musics)}
           <i18n path="commands.mai.search.messages.page">
             <>{page}</>
             <>{totalPages}</>

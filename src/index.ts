@@ -1,10 +1,10 @@
 import { Context, Logger, Schema } from "koishi";
 import { extendDatabase, loadData } from "./database";
-import { drawMusic } from "./images";
 import { registerCommands } from "./commands";
+import MaimaidxImages from "./images";
 
 export const name = "maimaidx";
-export const using = ["database", "puppeteer"];
+export const inject = ["database"];
 
 export interface Config {
   assetsPath: string;
@@ -23,8 +23,12 @@ export const Config: Schema<Config> = Schema.object({
 });
 
 export function apply(ctx: Context, config: Config) {
+  ctx = ctx.isolate(["maimaidxImages"]);
+
   const logger = new Logger("maimaidx");
   logger.debug(config);
+
+  ctx.plugin(MaimaidxImages, config);
 
   // Register i18n
   ctx.i18n.define("zh-CN", require("./locales/zh-CN"));
@@ -39,18 +43,4 @@ export function apply(ctx: Context, config: Config) {
 
   // Register commands provided by plugin
   registerCommands(ctx, config);
-
-  ctx.command("test").action(async (_) => {
-    return drawMusic(
-      config,
-      (
-        await ctx.database.get("maimaidx.music_info", {
-          id: 10301,
-        })
-      )[0],
-      await ctx.database.get("maimaidx.chart_info", {
-        music: 10301,
-      })
-    );
-  });
 }

@@ -1,13 +1,12 @@
 import { Context, escapeRegExp, $ } from "koishi";
 
+export const name = "maimaidxCommandsSearch";
+export const inject = ["maimaidxImages"];
+
 /**
  * Provide search command.
- *
- * This is used to query songs in the database.
- * @param ctx The context of koishi
- * @param config Config object of the plugin
  */
-export function registerCommandSearch(ctx: Context) {
+export function apply(ctx: Context) {
   const itemPerPage = 30;
 
   // Search music by ID.

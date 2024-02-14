@@ -1,12 +1,11 @@
 import { Context } from "koishi";
-import { registerCommandSearch } from "./search";
+import * as search from "./search";
 
 export const name = "maimaidxCommands";
-export const inject = ["maimaidxImages"];
 
 /**
  * Commands provided by the plugin.
  */
 export function apply(ctx: Context) {
-  registerCommandSearch(ctx);
+  ctx.plugin(search);
 }

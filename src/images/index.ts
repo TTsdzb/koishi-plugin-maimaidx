@@ -24,7 +24,6 @@ class MaimaidxImages extends Service {
 }
 
 namespace MaimaidxImages {
-  export const inject = ["puppeteer"];
   export interface Config {
     assetsPath: string;
     botName: string;

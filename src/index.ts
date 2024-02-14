@@ -4,7 +4,7 @@ import MaimaidxImages from "./images";
 import * as commands from "./commands";
 
 export const name = "maimaidx";
-export const inject = ["database"];
+export const inject = ["database", "puppeteer"];
 
 export interface Config {
   assetsPath: string;

@@ -19,8 +19,9 @@ class MaimaidxImages extends Service {
   drawMusic = music.drawMusic;
   drawSearchResults = search.drawSearchResults;
   drawSearchResultsWithArtist = search.drawSearchResultsWithArtist;
+  drawSearchResultsWithBase = search.drawSearchResultsWithBase;
   drawSearchResultsWithBpm = search.drawSearchResultsWithBpm;
-  drawSearchResultsWithChart = search.drawSearchResultsWithChart;
+  drawSearchResultsWithCharter = search.drawSearchResultsWithCharter;
 }
 
 namespace MaimaidxImages {

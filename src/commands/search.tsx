@@ -242,7 +242,7 @@ export function apply(ctx: Context) {
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {ctx.maimaidxImages.drawSearchResultsWithChart(musics)}
+          {ctx.maimaidxImages.drawSearchResultsWithCharter(musics)}
           <i18n path="commands.mai.search.messages.page">
             <>{page}</>
             <>{totalPages}</>
@@ -320,4 +320,74 @@ export function apply(ctx: Context) {
       options: { page: "$3" },
     })
     .shortcut(/^BPM查歌\s?(\d+)\s(\d+)$/i, { args: ["$1", "$2"] });
+
+  // Search music by base.
+  ctx
+    .command("mai.search.base <base:posint>")
+    .option("page", "-p [page:posint]", { fallback: 1 })
+    .action(async ({ options }, base) => {
+      // Check if the argument is properly provided.
+      if (base === undefined) return <i18n path=".pleaseProvideBase" />;
+      const page = options.page;
+
+      // Count all items and check if queried
+      // music exists.
+      const items = await ctx.database
+        .select("maimaidx.chart_info")
+        .where({
+          ds: { $gte: base, $lt: base + 1 },
+        })
+        .execute((row) => $.count(row.id));
+      if (items === 0)
+        return (
+          <i18n path=".songWithBaseNotFound">
+            <>{base}</>
+            <>{base + 1}</>
+          </i18n>
+        );
+
+      // Count pages and check if overflow
+      const totalPages = Math.ceil(items / itemPerPage);
+      if (page > totalPages)
+        return (
+          <i18n path="commands.mai.search.messages.pageOverflow">
+            <>{page}</>
+            <>{totalPages}</>
+          </i18n>
+        );
+
+      // Query the database for music.
+      const musics = await ctx.database
+        .join(
+          {
+            musicInfo: "maimaidx.music_info",
+            chart: "maimaidx.chart_info",
+          },
+          ({ musicInfo, chart }) => $.eq(musicInfo.id, chart.music)
+        )
+        .where((row) =>
+          $.and($.gte(row.chart.ds, base), $.lt(row.chart.ds, base + 1))
+        )
+        .orderBy((row) => row.chart.ds)
+        .limit(itemPerPage)
+        .offset((page - 1) * itemPerPage)
+        .execute();
+
+      // Return paged search result
+      return (
+        <>
+          <i18n path="commands.mai.search.messages.followingResultsFound" />
+          {ctx.maimaidxImages.drawSearchResultsWithBase(musics)}
+          <i18n path="commands.mai.search.messages.page">
+            <>{page}</>
+            <>{totalPages}</>
+          </i18n>
+        </>
+      );
+    })
+    .shortcut(/^定数查歌\s?(\d+)\s(\d+)$/i, {
+      args: ["$1"],
+      options: { page: "$2" },
+    })
+    .shortcut(/^定数查歌\s?(\d+)$/i, { args: ["$1"] });
 }

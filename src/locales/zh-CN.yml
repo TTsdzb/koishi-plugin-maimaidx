@@ -94,6 +94,15 @@ commands:
       # Search music with chart base
       base:
         description: 通过谱面定数搜索歌曲。
+        usage: |-
+          你也可以直接使用该命令的快捷匹配：定数查歌&lt;定数&gt; [页数]
+        examples: |-
+          /mai.search.base 14
+          定数查歌14
+          定数查歌14 2
+        messages:
+          pleaseProvideBase: 请指定要搜索的定数。
+          songWithBaseNotFound: 没有找到定数为{0}~{1}的乐曲。
 
       # Message string definition
       # Messages shared by multiple search commands

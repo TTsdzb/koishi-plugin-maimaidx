@@ -179,7 +179,13 @@ export function apply(ctx: Context) {
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {ctx.maimaidxImages.drawSearchResultsWithArtist(musics)}
+          {ctx.maimaidxImages.drawSearchResults(musics, [
+            {
+              title: "曲师",
+              font: "siyuan",
+              value: (music) => music.artist,
+            },
+          ])}
           <i18n path="commands.mai.search.messages.page">
             <>{page}</>
             <>{totalPages}</>
@@ -242,7 +248,13 @@ export function apply(ctx: Context) {
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {ctx.maimaidxImages.drawSearchResultsWithCharter(musics)}
+          {ctx.maimaidxImages.drawSearchResultsWithChart(musics, [
+            {
+              title: "谱师",
+              font: "siyuan",
+              value: (music) => music.chart.charter,
+            },
+          ])}
           <i18n path="commands.mai.search.messages.page">
             <>{page}</>
             <>{totalPages}</>
@@ -307,7 +319,13 @@ export function apply(ctx: Context) {
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {ctx.maimaidxImages.drawSearchResultsWithBpm(musics)}
+          {ctx.maimaidxImages.drawSearchResults(musics, [
+            {
+              title: "BPM",
+              font: "torus",
+              value: (music) => music.bpm,
+            },
+          ])}
           <i18n path="commands.mai.search.messages.page">
             <>{page}</>
             <>{totalPages}</>
@@ -377,7 +395,13 @@ export function apply(ctx: Context) {
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {ctx.maimaidxImages.drawSearchResultsWithBase(musics)}
+          {ctx.maimaidxImages.drawSearchResultsWithChart(musics, [
+            {
+              title: "定数",
+              font: "torus",
+              value: (music) => music.chart.ds.toFixed(1),
+            },
+          ])}
           <i18n path="commands.mai.search.messages.page">
             <>{page}</>
             <>{totalPages}</>

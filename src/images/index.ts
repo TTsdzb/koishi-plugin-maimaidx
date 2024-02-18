@@ -1,5 +1,6 @@
 import { Context, Service } from "koishi";
 import { Config } from "..";
+import * as base from "./base";
 import * as music from "./music";
 import * as search from "./search";
 
@@ -15,6 +16,7 @@ class MaimaidxImages extends Service {
     this.config = config;
   }
 
+  drawBaseTable = base.drawBaseTable;
   drawMusicSimple = music.drawMusicSimple;
   drawMusic = music.drawMusic;
   drawSearchResults = search.drawSearchResults;

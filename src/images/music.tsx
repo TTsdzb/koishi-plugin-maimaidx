@@ -1,5 +1,4 @@
 import { h } from "koishi";
-import { Config } from "..";
 import { ChartInfo, MusicInfo } from "../types";
 
 const category = {
@@ -75,7 +74,8 @@ export function drawMusicSimple(music: MusicInfo, charts: ChartInfo[]): h {
             width: 360px;
             height: 360px;
           "
-          src={`https://www.diving-fish.com/covers/${(music.id > 10000
+          src={`https://www.diving-fish.com/covers/${(music.id > 10000 &&
+          music.id <= 11000
             ? music.id - 10000
             : music.id
           )

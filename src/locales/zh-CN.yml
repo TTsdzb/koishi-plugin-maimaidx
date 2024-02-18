@@ -116,6 +116,14 @@ commands:
     # Query base table of a given difficulty
     base:
       description: 查询指定难度的定数表。
+      usage: |-
+        你也可以直接使用该命令的快捷匹配：&lt;定数&gt;定数表
+      examples: |-
+        /mai.base 14
+        14定数表
+      messages:
+        pleaseProvideBase: 请指定定数。
+        songWithBaseNotFound: 没有定数为{0}~{1}的乐曲。
 
     # Command
     # Query scores of a player

@@ -217,7 +217,7 @@ export function drawMusicSimple(music: MusicInfo, charts: ChartInfo[]): h {
             height: 14px;
             line-height: 14px;
             font-size: 14px;
-            font-family: siyuan;
+            font-family: torus;
             color: white;
             text-shadow: 0 0 2px purple;
             text-align: center;

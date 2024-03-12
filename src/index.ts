@@ -23,7 +23,7 @@ export const Config: Schema<Config> = Schema.object({
 });
 
 export function apply(ctx: Context, config: Config) {
-  ctx = ctx.isolate(["maimaidxImages"]);
+  ctx = ctx.isolate("maimaidxImages");
 
   const logger = new Logger("maimaidx");
   logger.debug(config);

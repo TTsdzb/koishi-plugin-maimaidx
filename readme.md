@@ -16,5 +16,5 @@
 
 1. 首先确认安装了 `puppeteer`（用于生成图片）、`database`（用于存储歌曲信息）服务；
 2. 安装本插件；
-3. （可选）在插件设置的 `botName` 中填入你的 Bot 名称；
+3. （可选）[配置 `nickname`](https://koishi.chat/zh-CN/api/core/app.html#options-nickname)；
 4. 启用插件。

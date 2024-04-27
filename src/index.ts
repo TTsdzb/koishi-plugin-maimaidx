@@ -19,11 +19,18 @@ export const Config: Schema<Config> = Schema.object({
     ),
   botName: Schema.string()
     .default("Koishi")
-    .description("生成图片时要展示的Bot名称。"),
+    .description("生成图片时要展示的Bot名称。")
+    .hidden(),
 });
 
 export function apply(ctx: Context, config: Config) {
   ctx = ctx.isolate("maimaidxImages");
+
+  if (ctx.root.config.nickname) {
+    if (ctx.root.config.nickname instanceof Array)
+      config.botName = ctx.root.config.nickname[0];
+    else config.botName = ctx.root.config.nickname;
+  }
 
   const logger = new Logger("maimaidx");
   logger.debug(config);

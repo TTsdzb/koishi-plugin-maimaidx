@@ -7,4 +7,4 @@ export * from "./alias";
 export * from "./chart";
 export * from "./diving_fish";
 export * from "./music";
-export * from "./xray";
+export * from "./yuzu";

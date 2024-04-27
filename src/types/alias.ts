@@ -1,6 +1,6 @@
 import { Context, Logger } from "koishi";
 import { z } from "zod";
-import { XrayApiAliases, fetchXrayMusicAliases } from "./xray";
+import { YuzuApiAliases, fetchYuzuMusicAliases } from "./yuzu";
 
 /**
  * Schema representing an alias (别名) of a music.
@@ -55,29 +55,27 @@ export function extendAlias(ctx: Context) {
 }
 
 /**
- * Extract all `Alias` from `XrayApiAliases`.
- * @param apiAliases XrayApiAliases returned by the API
+ * Extract all `Alias` from `YuzuApiAliases`.
+ * @param apiAliases YuzuApiAliases returned by the API
  * @returns List of all aliases
  */
-export function extractAliases(apiAliases: XrayApiAliases): Alias[] {
+export function extractAliases(apiAliases: YuzuApiAliases): Alias[] {
   let aliases = [];
 
-  for (let musicId in apiAliases) {
-    for (let alias of apiAliases[musicId]) {
-      aliases.push(
-        Alias.parse({
-          music: musicId,
-          alias,
-        })
-      );
-    }
-  }
+  apiAliases.content.forEach((song) => {
+    song.Alias.forEach((alias) =>
+      aliases.push({
+        music: song.SongID,
+        alias,
+      })
+    );
+  });
 
   return aliases;
 }
 
 /**
- * Load music aliases from Xray API.
+ * Load music aliases from Yuzu API.
  * @param ctx Context of Koishi
  */
 export async function loadAliases(ctx: Context) {
@@ -86,9 +84,9 @@ export async function loadAliases(ctx: Context) {
   let aliases: Alias[] = [];
 
   try {
-    aliases = extractAliases(await fetchXrayMusicAliases(ctx));
+    aliases = extractAliases(await fetchYuzuMusicAliases(ctx));
   } catch (e) {
-    logger.error(`Error occurred while loading alias from Xray API:`);
+    logger.error(`Error occurred while loading alias from Yuzu API:`);
     logger.error(e);
     logger.warn(
       "Switching to caches in the database. Note that if this is your first time using this plugin, you will encounter problems."

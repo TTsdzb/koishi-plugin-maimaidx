@@ -1,5 +1,4 @@
 import { Context, Service } from "koishi";
-import { Config } from "..";
 import * as base from "./base";
 import * as music from "./music";
 import * as search from "./search";
@@ -8,9 +7,9 @@ import * as search from "./search";
  * Image generation with Puppeteer.
  */
 class MaimaidxImages extends Service {
-  config: Config;
+  config: MaimaidxImages.Config;
 
-  constructor(ctx: Context, config: Config) {
+  constructor(ctx: Context, config: MaimaidxImages.Config) {
     super(ctx, "maimaidxImages", true);
 
     this.config = config;

@@ -1,7 +1,7 @@
 import { Context, Logger, Schema } from "koishi";
 import { extendDatabase, loadData } from "./database";
 import MaimaidxImages from "./images";
-import { MaimaidxDivingFishSongCover } from "./song-cover/diving-fish";
+import MaimaidxDivingFishSongCover from "./song-cover/diving-fish";
 import * as commands from "./commands";
 
 export const name = "maimaidx";

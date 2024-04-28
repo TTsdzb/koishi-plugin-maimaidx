@@ -1,18 +1,9 @@
-import { Context, Service } from "koishi";
-import { Config } from "..";
+import { Service } from "koishi";
 
 /**
  * Song cover URL generation service.
  */
-abstract class MaimaidxSongCover extends Service {
-  config: Config;
-
-  constructor(ctx: Context, config: Config) {
-    super(ctx, "maimaidxSongCover", true);
-
-    this.config = config;
-  }
-
+export abstract class MaimaidxSongCover extends Service {
   /**
    * Get the URL of given song's cover image.
    * @param id Song ID
@@ -20,4 +11,8 @@ abstract class MaimaidxSongCover extends Service {
   abstract getCover(id: number): string;
 }
 
-export default MaimaidxSongCover;
+declare module "koishi" {
+  interface Context {
+    maimaidxSongCover: MaimaidxSongCover;
+  }
+}

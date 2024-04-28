@@ -1,6 +1,11 @@
-import MaimaidxSongCover from ".";
+import { Context } from "koishi";
+import { MaimaidxSongCover } from ".";
 
-export class MaimaidxDivingFishSongCover extends MaimaidxSongCover {
+class MaimaidxDivingFishSongCover extends MaimaidxSongCover {
+  constructor(ctx: Context) {
+    super(ctx, "maimaidxSongCover", true);
+  }
+
   getCover(id: number): string {
     return `https://www.diving-fish.com/covers/${(id > 10000 && id <= 11000
       ? id - 10000
@@ -11,12 +16,6 @@ export class MaimaidxDivingFishSongCover extends MaimaidxSongCover {
   }
 }
 
-namespace MaimaidxDivingFishSongCover {
-  export interface Config {}
-}
+namespace MaimaidxDivingFishSongCover {}
 
-declare module "koishi" {
-  interface Context {
-    maimaidxSongCover: MaimaidxDivingFishSongCover;
-  }
-}
+export default MaimaidxDivingFishSongCover;

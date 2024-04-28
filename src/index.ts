@@ -13,15 +13,10 @@ export interface Config {
 }
 
 export const Config: Schema<Config> = Schema.object({
-  assetsPath: Schema.path()
-    .default("https://static.closure.cc/maimai-assets")
-    .description(
-      "资源文件的存储路径。一般无需修改，但如果生成图片出现问题，你可以下载到本地或自建服务。请查看[文档](https://github.com/TTsdzb/koishi-plugin-maimaidx#%E6%B3%A8%E6%84%8F)。"
-    ),
-  botName: Schema.string()
-    .default("Koishi")
-    .description("生成图片时要展示的Bot名称。")
-    .hidden(),
+  assetsPath: Schema.path().default("https://static.closure.cc/maimai-assets"),
+  botName: Schema.string().default("Koishi").hidden(),
+}).i18n({
+  "zh-CN": require("./locales/zh-CN")._config,
 });
 
 export function apply(ctx: Context, config: Config) {

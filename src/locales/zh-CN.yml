@@ -204,3 +204,6 @@ commands:
       # Update song alias
       alias:
         description: 更新歌曲的别名信息。插件会自动定时更新，一般无需手动运行。重启Koishi也会自动更新。
+
+_config:
+  assetsPath: "资源文件的存储路径。一般无需修改，但如果生成图片出现问题，你可以下载到本地或自建服务。请查看[文档](https://github.com/TTsdzb/koishi-plugin-maimaidx#%E6%B3%A8%E6%84%8F)。"

@@ -1,6 +1,7 @@
 import { Context, Logger, Schema } from "koishi";
 import { extendDatabase, loadData } from "./database";
 import MaimaidxImages from "./images";
+import { MaimaidxDivingFishSongCover } from "./song-cover/diving-fish";
 import * as commands from "./commands";
 
 export const name = "maimaidx";
@@ -24,7 +25,7 @@ export const Config: Schema<Config> = Schema.object({
 });
 
 export function apply(ctx: Context, config: Config) {
-  ctx = ctx.isolate("maimaidxImages");
+  ctx = ctx.isolate("maimaidxSongCover").isolate("maimaidxImages");
 
   if (ctx.root.config.nickname) {
     if (ctx.root.config.nickname instanceof Array)
@@ -35,6 +36,7 @@ export function apply(ctx: Context, config: Config) {
   const logger = new Logger("maimaidx");
   logger.debug(config);
 
+  ctx.plugin(MaimaidxDivingFishSongCover, config);
   ctx.plugin(MaimaidxImages, config);
 
   // Register i18n

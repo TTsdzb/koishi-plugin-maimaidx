@@ -74,13 +74,7 @@ export function drawMusicSimple(music: MusicInfo, charts: ChartInfo[]): h {
             width: 360px;
             height: 360px;
           "
-          src={`https://www.diving-fish.com/covers/${(music.id > 10000 &&
-          music.id <= 11000
-            ? music.id - 10000
-            : music.id
-          )
-            .toString()
-            .padStart(5, "0")}.png`}
+          src={this.ctx.maimaidxSongCover.getCover(music.id)}
         />
         <img
           style="
@@ -327,13 +321,7 @@ export function drawMusic(music: MusicInfo, charts: ChartInfo[]): h {
             width: 400px;
             height: 400px;
           "
-          src={`https://www.diving-fish.com/covers/${(music.id > 10000 &&
-          music.id <= 11000
-            ? music.id - 10000
-            : music.id
-          )
-            .toString()
-            .padStart(5, "0")}.png`}
+          src={this.ctx.maimaidxSongCover.getCover(music.id)}
         />
         <img
           style="

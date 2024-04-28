@@ -24,6 +24,8 @@ class MaimaidxImages extends Service {
 }
 
 namespace MaimaidxImages {
+  export const inject = ["maimaidxSongCover"];
+
   export interface Config {
     assetsPath: string;
     botName: string;

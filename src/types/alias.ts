@@ -56,12 +56,12 @@ namespace Alias {
    * @returns List of all aliases
    */
   export function fromYuzuApiAliases(apiAliases: YuzuApiAliases): Alias[] {
-    let aliases = [];
+    const aliases: Alias[] = [];
 
     apiAliases.content.forEach((song) => {
       song.Alias.forEach((alias) =>
         aliases.push({
-          music: song.SongID,
+          musicId: song.SongID,
           alias,
         })
       );

@@ -7,8 +7,6 @@ import * as search from "./search";
  * Image generation with Puppeteer.
  */
 class MaimaidxImages extends Service {
-  config: MaimaidxImages.Config;
-
   constructor(ctx: Context, config: MaimaidxImages.Config) {
     super(ctx, "maimaidxImages", true);
 

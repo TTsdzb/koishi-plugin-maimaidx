@@ -30,6 +30,13 @@ export function apply(ctx: Context, config: Config) {
 
   const logger = new Logger("maimaidx");
   logger.debug(config);
+  logger.debug(`Bot nickname: ${nickname}`);
+
+  // Register i18n
+  ctx.i18n.define("zh-CN", require("./locales/zh-CN"));
+
+  // Extend database model
+  extendDatabase(ctx);
 
   // Load internal services
   ctx.plugin(MaimaidxDivingFishSongCover);
@@ -37,12 +44,6 @@ export function apply(ctx: Context, config: Config) {
     assetsPath: config.assetsPath,
     botName: nickname,
   });
-
-  // Register i18n
-  ctx.i18n.define("zh-CN", require("./locales/zh-CN"));
-
-  // Extend database model
-  extendDatabase(ctx);
 
   // Load data from Diving-fish when ready
   ctx.on("ready", async () => {

@@ -33,13 +33,7 @@ export function drawBaseTable(
       >
         <img
           class="cover"
-          src={`https://www.diving-fish.com/covers/${(music.musicInfo.id >
-            10000 && music.musicInfo.id <= 11000
-            ? music.musicInfo.id - 10000
-            : music.musicInfo.id
-          )
-            .toString()
-            .padStart(5, "0")}.png`}
+          src={this.ctx.maimaidxSongCover.getCover(music.musicInfo.id)}
         />
         {music.musicInfo.type === "DX" ? (
           <img

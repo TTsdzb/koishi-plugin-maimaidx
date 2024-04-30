@@ -4,7 +4,7 @@ import {
   ApiMusic,
   fetchMusic,
   fetchChartStats,
-} from "./diving_fish";
+} from "../apis/diving-fish";
 import MusicInfo from "./music";
 
 /**

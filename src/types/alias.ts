@@ -1,5 +1,5 @@
 import { Context, Logger } from "koishi";
-import { YuzuApiAliases, fetchYuzuMusicAliases } from "./yuzu";
+import { YuzuApiAliases, fetchYuzuMusicAliases } from "../apis/yuzu";
 
 /**
  * Represents alias (别名) of a music.

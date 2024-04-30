@@ -1,5 +1,5 @@
 import { Context } from "koishi";
-import { ApiMusic } from "./diving_fish";
+import { ApiMusic } from "../apis/diving-fish";
 
 /**
  * Represents basic information of a music (乐曲).

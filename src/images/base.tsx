@@ -1,5 +1,6 @@
 import { h } from "koishi";
-import { ChartInfo, MusicInfo } from "../types";
+import { ChartInfo } from "../types";
+import MusicInfo from "../types/music";
 
 const colors = [
   "111, 212, 61",

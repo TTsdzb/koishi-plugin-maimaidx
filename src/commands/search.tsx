@@ -1,7 +1,7 @@
 import { Context, escapeRegExp, $ } from "koishi";
 
 export const name = "maimaidxCommandsSearch";
-export const inject = ["maimaidxImages"];
+export const inject = ["database", "maimaidxImages"];
 
 /**
  * Provide search command.

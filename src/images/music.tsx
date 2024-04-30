@@ -182,7 +182,7 @@ export function drawMusicSimple(music: MusicInfo, charts: ChartInfo[]): h {
             text-shadow: 1px 1px 0 black;
           "
         >
-          <p style="float: left; margin: 0">Version: {music.from}</p>
+          <p style="float: left; margin: 0">Version: {music.version}</p>
           <p style="float: right; margin: 0">BPM: {music.bpm}</p>
         </div>
         <div
@@ -331,7 +331,7 @@ export function drawMusic(music: MusicInfo, charts: ChartInfo[]): h {
             width: 250px;
             height: 120px;
           "
-          src={`${this.config.assetsPath}/mai/pic/${music.from}.png`}
+          src={`${this.config.assetsPath}/mai/pic/${music.version}.png`}
         />
         <img
           style="

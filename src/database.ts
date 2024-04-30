@@ -2,17 +2,17 @@ import { Context } from "koishi";
 import {
   extendAlias,
   extendChartInfo,
-  extendMusicInfo,
   loadAliases,
   loadMusicAndChart,
 } from "./types";
+import MusicInfo from "./types/music";
 
 /**
  * Extend all table on the database.
  * @param ctx Context object of Koishi
  */
 export function extendDatabase(ctx: Context) {
-  extendMusicInfo(ctx);
+  MusicInfo.extendDatabase(ctx);
   extendChartInfo(ctx);
   extendAlias(ctx);
 }

@@ -6,7 +6,7 @@ import {
   fetchMusic,
   fetchChartStats,
 } from "./diving_fish";
-import { extractMusicInfo } from "./music";
+import MusicInfo from "./music";
 
 /**
  * Scheme representing information of a chart (谱面).
@@ -118,7 +118,7 @@ export async function loadMusicAndChart(ctx: Context) {
     const apiChartStats = await fetchChartStats(ctx);
 
     apiMusics.forEach((apiMusic) => {
-      musics.push(extractMusicInfo(apiMusic));
+      musics.push(MusicInfo.fromDivingFishApiMusic(apiMusic));
       charts = charts.concat(
         extractChartInfo(apiMusic, apiChartStats.charts[apiMusic.id.toString()])
       );

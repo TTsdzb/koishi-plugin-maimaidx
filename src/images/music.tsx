@@ -1,5 +1,6 @@
 import { h } from "koishi";
-import { ChartInfo, MusicInfo } from "../types";
+import MusicInfo from "../types/music";
+import ChartInfo from "../types/chart";
 
 const category = {
   "流行&动漫": "anime",
@@ -25,7 +26,7 @@ export function drawMusicSimple(music: MusicInfo, charts: ChartInfo[]): h {
           : "width: 82px; margin: 0 13px 0 0"
       }
     >
-      {chart.ds.toFixed(1)}
+      {chart.difficulty.toFixed(1)}
     </p>
   ));
 
@@ -248,7 +249,7 @@ export function drawMusic(music: MusicInfo, charts: ChartInfo[]): h {
             ${chart.order === 4 ? "" : "color: white;"}
           `}
         >
-          {chart.level}({chart.ds.toFixed(1)})
+          {chart.level}({chart.difficulty.toFixed(1)})
         </p>
         <p style="width: 187px; margin: 0 3px 0 0">
           {chart.stat?.fit_diff !== undefined

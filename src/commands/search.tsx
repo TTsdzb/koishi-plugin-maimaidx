@@ -30,7 +30,7 @@ export function apply(ctx: Context) {
       const charts = await ctx.database
         .select("maimaidx.chart_info")
         .where({
-          music: id,
+          musicId: id,
         })
         .orderBy("order")
         .execute();
@@ -64,7 +64,7 @@ export function apply(ctx: Context) {
         const charts = await ctx.database
           .select("maimaidx.chart_info")
           .where({
-            music: musics[0].id,
+            musicId: musics[0].id,
           })
           .orderBy("order")
           .execute();
@@ -116,7 +116,7 @@ export function apply(ctx: Context) {
         const charts = await ctx.database
           .select("maimaidx.chart_info")
           .where({
-            music: musics[0].id,
+            musicId: musics[0].id,
           })
           .orderBy("order")
           .execute();
@@ -236,7 +236,7 @@ export function apply(ctx: Context) {
             musicInfo: "maimaidx.music_info",
             chart: "maimaidx.chart_info",
           },
-          ({ musicInfo, chart }) => $.eq(musicInfo.id, chart.music)
+          ({ musicInfo, chart }) => $.eq(musicInfo.id, chart.musicId)
         )
         .where((row) => $.regex(row.chart.charter, escapeRegExp(charter)))
         .orderBy((row) => row.musicInfo.id)
@@ -353,7 +353,7 @@ export function apply(ctx: Context) {
       const items = await ctx.database
         .select("maimaidx.chart_info")
         .where({
-          ds: { $gte: base, $lt: base + 1 },
+          difficulty: { $gte: base, $lt: base + 1 },
         })
         .execute((row) => $.count(row.id));
       if (items === 0)
@@ -381,12 +381,15 @@ export function apply(ctx: Context) {
             musicInfo: "maimaidx.music_info",
             chart: "maimaidx.chart_info",
           },
-          ({ musicInfo, chart }) => $.eq(musicInfo.id, chart.music)
+          ({ musicInfo, chart }) => $.eq(musicInfo.id, chart.musicId)
         )
         .where((row) =>
-          $.and($.gte(row.chart.ds, base), $.lt(row.chart.ds, base + 1))
+          $.and(
+            $.gte(row.chart.difficulty, base),
+            $.lt(row.chart.difficulty, base + 1)
+          )
         )
-        .orderBy((row) => row.chart.ds)
+        .orderBy((row) => row.chart.difficulty)
         .limit(itemPerPage)
         .offset((page - 1) * itemPerPage)
         .execute();

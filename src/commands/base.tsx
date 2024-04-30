@@ -20,12 +20,15 @@ export function apply(ctx: Context) {
             musicInfo: "maimaidx.music_info",
             chart: "maimaidx.chart_info",
           },
-          ({ musicInfo, chart }) => $.eq(musicInfo.id, chart.music)
+          ({ musicInfo, chart }) => $.eq(musicInfo.id, chart.musicId)
         )
         .where((row) =>
-          $.and($.gte(row.chart.ds, base), $.lt(row.chart.ds, base + 1))
+          $.and(
+            $.gte(row.chart.difficulty, base),
+            $.lt(row.chart.difficulty, base + 1)
+          )
         )
-        .orderBy((row) => row.chart.ds)
+        .orderBy((row) => row.chart.difficulty)
         .execute();
 
       // Check if the queried music exists.

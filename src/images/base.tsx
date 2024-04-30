@@ -1,6 +1,6 @@
 import { h } from "koishi";
-import { ChartInfo } from "../types";
 import MusicInfo from "../types/music";
+import ChartInfo from "../types/chart";
 
 const colors = [
   "111, 212, 61",
@@ -24,7 +24,7 @@ export function drawBaseTable(
   // and convert them into HTML elements.
   const bases: Record<string, h[]> = {};
   musics.forEach((music) => {
-    const base = music.chart.ds.toFixed(1);
+    const base = music.chart.difficulty.toFixed(1);
 
     if (!bases[base]) bases[base] = [];
     bases[base].push(

@@ -1,5 +1,6 @@
 import { h } from "koishi";
-import { ChartInfo, MusicInfo } from "../types";
+import MusicInfo from "../types/music";
+import ChartInfo from "../types/chart";
 
 const backgroundColors = [
   "#6fd43d",

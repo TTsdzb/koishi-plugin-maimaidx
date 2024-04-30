@@ -103,7 +103,7 @@ export function apply(ctx: Context) {
       });
       const musics = await ctx.database
         .select("maimaidx.music_info")
-        .where(musicAliases.map((alias) => alias.music))
+        .where(musicAliases.map((alias) => alias.musicId))
         .orderBy("id")
         .execute();
 
@@ -402,7 +402,7 @@ export function apply(ctx: Context) {
             {
               title: "定数",
               font: "torus",
-              value: (music) => music.chart.ds.toFixed(1),
+              value: (music) => music.chart.difficulty.toFixed(1),
             },
           ])}
           <i18n path="commands.mai.search.messages.page">

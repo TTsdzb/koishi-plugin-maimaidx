@@ -1,7 +1,7 @@
 import { Context } from "koishi";
-import { extendAlias, loadAliases } from "./types";
 import MusicInfo from "./types/music";
 import ChartInfo from "./types/chart";
+import Alias from "./types/alias";
 
 /**
  * Extend all table on the database.
@@ -10,7 +10,7 @@ import ChartInfo from "./types/chart";
 export function extendDatabase(ctx: Context) {
   MusicInfo.extendDatabase(ctx);
   ChartInfo.extendDatabase(ctx);
-  extendAlias(ctx);
+  Alias.extendDatabase(ctx);
 }
 
 /**
@@ -21,5 +21,5 @@ export function extendDatabase(ctx: Context) {
  */
 export async function loadData(ctx: Context) {
   await ChartInfo.loadMusicAndChart(ctx);
-  await loadAliases(ctx);
+  await Alias.loadAliases(ctx);
 }

@@ -1,6 +1,6 @@
 {
   "name": "koishi-plugin-maimaidx",
-  "description": "由Hoshino插件重写而来的国服舞萌DX查询插件，提供歌曲、成绩查询功能。使用前请务必查看文档！",
+  "description": "适用于Koishi的国服舞萌DX查询插件，提供歌曲、成绩查询功能。",
   "version": "0.0.1",
   "contributors": [
     "TTsdzb <ttsdzb@outlook.com>"
@@ -27,6 +27,9 @@
     "koishi": "^4.17.2"
   },
   "koishi": {
+    "description": {
+      "zh": "由Hoshino插件重写而来的国服舞萌DX查询插件，提供歌曲、成绩查询功能。使用前请务必查看文档！"
+    },
     "service": {
       "required": [
         "database",
@@ -34,7 +37,10 @@
       ],
       "optional": [],
       "implements": []
-    }
+    },
+    "locales": [
+      "zh"
+    ]
   },
   "dependencies": {
     "zod": "^3.23.4"

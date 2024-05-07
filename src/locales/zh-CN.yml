@@ -207,3 +207,8 @@ commands:
 
 _config:
   assetsPath: "资源文件的存储路径。一般无需修改，但如果生成图片出现问题，你可以下载到本地或自建服务。请查看[文档](https://github.com/TTsdzb/koishi-plugin-maimaidx#%E6%B3%A8%E6%84%8F)。"
+  coverProvider:
+    $desc: "选择生成图片时的歌曲封面来源。"
+    $inner:
+      - "从水鱼查分器获取封面"
+      - "从 Xray Bot API 获取抽象画"

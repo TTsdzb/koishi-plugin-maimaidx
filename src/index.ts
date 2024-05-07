@@ -2,17 +2,25 @@ import { Context, Logger, Schema } from "koishi";
 import { extendDatabase, loadData } from "./database";
 import MaimaidxImages from "./images";
 import MaimaidxDivingFishSongCover from "./song-cover/diving-fish";
+import MaimaidxXraySongCover from "./song-cover/xray";
 import * as commands from "./commands";
 
 export const name = "maimaidx";
-export const inject = ["database", "puppeteer"];
+export const inject = ["http", "database", "puppeteer"];
 
 export interface Config {
   assetsPath: string;
+  coverProvider: "diving-fish" | "xray";
 }
 
 export const Config: Schema<Config> = Schema.object({
   assetsPath: Schema.path().default("https://static.closure.cc/maimai-assets"),
+  coverProvider: Schema.union([
+    Schema.const("diving-fish"),
+    Schema.const("xray"),
+  ])
+    .role("radio")
+    .default("diving-fish"),
 }).i18n({
   "zh-CN": require("./locales/zh-CN")._config,
 });
@@ -39,7 +47,15 @@ export function apply(ctx: Context, config: Config) {
   extendDatabase(ctx);
 
   // Load internal services
-  ctx.plugin(MaimaidxDivingFishSongCover);
+  switch (config.coverProvider) {
+    case "xray":
+      ctx.plugin(MaimaidxXraySongCover);
+      break;
+    case "diving-fish":
+    default:
+      ctx.plugin(MaimaidxDivingFishSongCover);
+      break;
+  }
   ctx.plugin<MaimaidxImages.Config>(MaimaidxImages, {
     assetsPath: config.assetsPath,
     botName: nickname,

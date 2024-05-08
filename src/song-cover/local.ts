@@ -9,12 +9,7 @@ class MaimaidxLocalSongCover extends MaimaidxSongCover {
   }
 
   getCover(id: number): string {
-    return `${this.config.assetsPath}/mai/cover/${(id > 10000 && id <= 11000
-      ? id - 10000
-      : id
-    )
-      .toString()
-      .padStart(5, "0")}.png`;
+    return `${this.config.assetsPath}/mai/cover/${id}.png`;
   }
 }
 

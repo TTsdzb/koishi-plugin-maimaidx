@@ -20,7 +20,7 @@ class MaimaidxXraySongCover extends MaimaidxSongCover {
   data: z.infer<typeof abstractDataSchema>;
 
   constructor(ctx: Context) {
-    super(ctx, "maimaidxSongCover", true);
+    super(ctx, "maimaidxSongCover", false);
 
     ctx.on("ready", async () => {
       await this.loadData();

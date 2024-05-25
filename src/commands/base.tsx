@@ -1,7 +1,7 @@
 import { Context, $ } from "koishi";
 
 export const name = "maimaidxCommandsBase";
-export const inject = ["maimaidxImages"];
+export const inject = ["maimaidxSongDatabase", "maimaidxImages"];
 
 /**
  * Provide base command.
@@ -14,22 +14,7 @@ export function apply(ctx: Context) {
       if (base === undefined) return <i18n path=".pleaseProvideBase" />;
 
       // Query the database for music.
-      const musics = await ctx.database
-        .join(
-          {
-            musicInfo: "maimaidx.music_info",
-            chart: "maimaidx.chart_info",
-          },
-          ({ musicInfo, chart }) => $.eq(musicInfo.id, chart.musicId)
-        )
-        .where((row) =>
-          $.and(
-            $.gte(row.chart.difficulty, base),
-            $.lt(row.chart.difficulty, base + 1)
-          )
-        )
-        .orderBy((row) => row.chart.difficulty)
-        .execute();
+      const musics = await ctx.maimaidxSongDatabase.queryMusicByBase(base);
 
       // Check if the queried music exists.
       if (musics.length === 0)

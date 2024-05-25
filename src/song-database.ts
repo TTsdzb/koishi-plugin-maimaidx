@@ -155,6 +155,35 @@ class MaimaidxSongDatabase extends Service {
   }
 
   /**
+   * Query music and corresponding chart by chart's base.
+   *
+   * This method matches given base of the chart,
+   * and returns all music and chart which chart with given base.
+   * @param base Base to search
+   * @returns All music and its chart matches the given base
+   */
+  async queryMusicByBase(base: number): Promise<JoinedMusicAndChart[]> {
+    return (
+      await this.ctx.database
+      .join(
+        {
+          musicInfo: "maimaidx.music_info",
+          chart: "maimaidx.chart_info",
+        },
+        row => $.eq(row.musicInfo.id, row.chart.musicId)
+      )
+      .where((row) =>
+        $.and(
+          $.gte(row.chart.difficulty, base),
+          $.lt(row.chart.difficulty, base + 1)
+        )
+      )
+      .orderBy((row) => row.chart.difficulty)
+      .execute()
+    );
+  }
+
+  /**
    * Query music by its artist.
    *
    * This method matches given string in music's artist,
@@ -221,7 +250,7 @@ class MaimaidxSongDatabase extends Service {
    * @param high Higher bound of BPM to search
    * @param page Queried page number, starts at `1`
    * @param limit Item limitation per page
-   * @returns All music matches the given artist pattern
+   * @returns All music matches the given BPM range
    */
   async queryMusicByBpmPaged(
     low: number,
@@ -250,7 +279,7 @@ class MaimaidxSongDatabase extends Service {
    * @param base Base to search
    * @param page Queried page number, starts at `1`
    * @param limit Item limitation per page
-   * @returns All music matches the given charter pattern
+   * @returns All music and its chart matches the given base
    */
   async queryMusicByBasePaged(
     base: number,
@@ -266,7 +295,7 @@ class MaimaidxSongDatabase extends Service {
           },
           (row) => $.eq(row.musicInfo.id, row.chart.musicId)
         )
-        .where((row) => $.and($.gte(row.chart.difficulty, base), $.lte(row.chart.difficulty, base + 1))),
+        .where((row) => $.and($.gte(row.chart.difficulty, base), $.lt(row.chart.difficulty, base + 1))),
       (row) => $.count(row.chart.id),
       (row) => row.chart.difficulty,
       page,

@@ -1,7 +1,7 @@
 import { Context, escapeRegExp, $ } from "koishi";
 
 export const name = "maimaidxCommandsSearch";
-export const inject = ["database", "maimaidxImages"];
+export const inject = ["maimaidxSongDatabase", "maimaidxImages"];
 
 /**
  * Provide search command.
@@ -17,25 +17,16 @@ export function apply(ctx: Context) {
       if (id === undefined) return <i18n path=".pleaseProvideId" />;
 
       // Query the database for music.
-      const musics = await ctx.database.get("maimaidx.music_info", {
-        id,
-      });
+      const music = await ctx.maimaidxSongDatabase.queryMusicById(id);
 
       // Check if the queried music exists.
-      if (musics.length === 0)
+      if (music === undefined)
         return <i18n path=".songWithIdNotFound">{id}</i18n>;
 
-      // Draw and return information for the user.
-      // There should be only one music when query by id.
-      const charts = await ctx.database
-        .select("maimaidx.chart_info")
-        .where({
-          musicId: id,
-        })
-        .orderBy("order")
-        .execute();
+      // Get the charts of the music.
+      const charts = await ctx.maimaidxSongDatabase.getCharts(music);
 
-      return ctx.maimaidxImages.drawMusic(musics[0], charts);
+      return ctx.maimaidxImages.drawMusic(music, charts);
     })
     .shortcut(/^id\s?(\d{1,5})$/i, { args: ["$1"] });
 
@@ -47,27 +38,15 @@ export function apply(ctx: Context) {
       if (title === undefined) return <i18n path=".pleaseProvideTitle" />;
 
       // Query the database for music.
-      const musics = await ctx.database
-        .select("maimaidx.music_info")
-        .where({
-          title: { $regex: escapeRegExp(title) },
-        })
-        .orderBy("id")
-        .execute();
+      const musics = await ctx.maimaidxSongDatabase.queryMusicByTitle(title);
 
       // Check if the queried music exists.
       if (musics.length === 0)
         return <i18n path=".songWithTitleNotFound">{title}</i18n>;
 
-      // If there's only one music, return its information
+      // If there's only one music, return its information.
       if (musics.length === 1) {
-        const charts = await ctx.database
-          .select("maimaidx.chart_info")
-          .where({
-            musicId: musics[0].id,
-          })
-          .orderBy("order")
-          .execute();
+        const charts = await ctx.maimaidxSongDatabase.getCharts(musics[0]);
 
         return ctx.maimaidxImages.drawMusic(musics[0], charts);
       }
@@ -98,28 +77,15 @@ export function apply(ctx: Context) {
       if (alias === undefined) return <i18n path=".pleaseProvideAlias" />;
 
       // Query the database for music.
-      const musicAliases = await ctx.database.get("maimaidx.alias", {
-        alias: { $regex: `^${escapeRegExp(alias)}$` },
-      });
-      const musics = await ctx.database
-        .select("maimaidx.music_info")
-        .where(musicAliases.map((alias) => alias.musicId))
-        .orderBy("id")
-        .execute();
+      const musics = await ctx.maimaidxSongDatabase.queryMusicByAlias(alias);
 
       // Check if the queried music exists.
       if (musics.length === 0)
         return <i18n path=".songWithAliasNotFound">{alias}</i18n>;
 
-      // If there's only one music, return its information
+      // If there's only one music, return its information.
       if (musics.length === 1) {
-        const charts = await ctx.database
-          .select("maimaidx.chart_info")
-          .where({
-            musicId: musics[0].id,
-          })
-          .orderBy("order")
-          .execute();
+        const charts = await ctx.maimaidxSongDatabase.getCharts(musics[0]);
 
         return ctx.maimaidxImages.drawMusic(musics[0], charts);
       }
@@ -143,43 +109,28 @@ export function apply(ctx: Context) {
       if (artist === undefined) return <i18n path=".pleaseProvideArtist" />;
       const page = options.page;
 
-      // Count all items and check if queried
-      // music exists.
-      const items = await ctx.database
-        .select("maimaidx.music_info")
-        .where({
-          artist: { $regex: escapeRegExp(artist) },
-        })
-        .execute((row) => $.count(row.id));
-      if (items === 0)
+      // Query and check if queried music exists.
+      const result = await ctx.maimaidxSongDatabase.queryMusicByArtistPaged(
+        artist,
+        page
+      );
+      if (result.total === 0)
         return <i18n path=".songWithArtistNotFound">{artist}</i18n>;
 
-      // Count pages and check if overflow
-      const totalPages = Math.ceil(items / itemPerPage);
-      if (page > totalPages)
+      // Check if overflow.
+      if (result.page > result.total)
         return (
           <i18n path="commands.mai.search.messages.pageOverflow">
             <>{page}</>
-            <>{totalPages}</>
+            <>{result.total}</>
           </i18n>
         );
 
-      // Query the database for music.
-      const musics = await ctx.database
-        .select("maimaidx.music_info")
-        .where({
-          artist: { $regex: escapeRegExp(artist) },
-        })
-        .orderBy("id")
-        .limit(itemPerPage)
-        .offset((page - 1) * itemPerPage)
-        .execute();
-
-      // Return paged search result
+      // Return paged search result.
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {ctx.maimaidxImages.drawSearchResults(musics, [
+          {ctx.maimaidxImages.drawSearchResults(result.data, [
             {
               title: "曲师",
               font: "siyuan",
@@ -188,7 +139,7 @@ export function apply(ctx: Context) {
           ])}
           <i18n path="commands.mai.search.messages.page">
             <>{page}</>
-            <>{totalPages}</>
+            <>{result.total}</>
           </i18n>
         </>
       );
@@ -208,47 +159,28 @@ export function apply(ctx: Context) {
       if (charter === undefined) return <i18n path=".pleaseProvideCharter" />;
       const page = options.page;
 
-      // Count all items and check if queried
-      // music exists.
-      const items = await ctx.database
-        .select("maimaidx.chart_info")
-        .where({
-          charter: { $regex: escapeRegExp(charter) },
-        })
-        .execute((row) => $.count(row.id));
-      if (items === 0)
+      // Query and check if queried music exists.
+      const results = await ctx.maimaidxSongDatabase.queryMusicByCharterPaged(
+        charter,
+        page
+      );
+      if (results.total === 0)
         return <i18n path=".songWithCharterNotFound">{charter}</i18n>;
 
-      // Count pages and check if overflow
-      const totalPages = Math.ceil(items / itemPerPage);
-      if (page > totalPages)
+      // Check if overflow.
+      if (page > results.total)
         return (
           <i18n path="commands.mai.search.messages.pageOverflow">
             <>{page}</>
-            <>{totalPages}</>
+            <>{results.total}</>
           </i18n>
         );
 
-      // Query the database for music.
-      const musics = await ctx.database
-        .join(
-          {
-            musicInfo: "maimaidx.music_info",
-            chart: "maimaidx.chart_info",
-          },
-          ({ musicInfo, chart }) => $.eq(musicInfo.id, chart.musicId)
-        )
-        .where((row) => $.regex(row.chart.charter, escapeRegExp(charter)))
-        .orderBy((row) => row.musicInfo.id)
-        .limit(itemPerPage)
-        .offset((page - 1) * itemPerPage)
-        .execute();
-
-      // Return paged search result
+      // Return paged search result.
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {ctx.maimaidxImages.drawSearchResultsWithChart(musics, [
+          {ctx.maimaidxImages.drawSearchResultsWithChart(results.data, [
             {
               title: "谱师",
               font: "siyuan",
@@ -257,7 +189,7 @@ export function apply(ctx: Context) {
           ])}
           <i18n path="commands.mai.search.messages.page">
             <>{page}</>
-            <>{totalPages}</>
+            <>{results.total}</>
           </i18n>
         </>
       );
@@ -278,15 +210,9 @@ export function apply(ctx: Context) {
         return <i18n path=".pleaseProvideBpmBounds" />;
       const page = options.page;
 
-      // Count all items and check if queried
-      // music exists.
-      const items = await ctx.database
-        .select("maimaidx.music_info")
-        .where({
-          bpm: { $gte: low, $lte: high },
-        })
-        .execute((row) => $.count(row.id));
-      if (items === 0)
+      // Query and check if queried music exists.
+      const results = await ctx.maimaidxSongDatabase.queryMusicByBpmPaged(low, high, page);
+      if (results.total === 0)
         return (
           <i18n path=".songWithBpmNotFound">
             <>{low}</>
@@ -294,32 +220,20 @@ export function apply(ctx: Context) {
           </i18n>
         );
 
-      // Count pages and check if overflow
-      const totalPages = Math.ceil(items / itemPerPage);
-      if (page > totalPages)
+      // Check if overflow.
+      if (page > results.total)
         return (
           <i18n path="commands.mai.search.messages.pageOverflow">
             <>{page}</>
-            <>{totalPages}</>
+            <>{results.total}</>
           </i18n>
         );
 
-      // Query the database for music.
-      const musics = await ctx.database
-        .select("maimaidx.music_info")
-        .where({
-          bpm: { $gte: low, $lte: high },
-        })
-        .orderBy("id")
-        .limit(itemPerPage)
-        .offset((page - 1) * itemPerPage)
-        .execute();
-
-      // Return paged search result
+      // Return paged search result.
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {ctx.maimaidxImages.drawSearchResults(musics, [
+          {ctx.maimaidxImages.drawSearchResults(results.data, [
             {
               title: "BPM",
               font: "torus",
@@ -328,7 +242,7 @@ export function apply(ctx: Context) {
           ])}
           <i18n path="commands.mai.search.messages.page">
             <>{page}</>
-            <>{totalPages}</>
+            <>{results.total}</>
           </i18n>
         </>
       );
@@ -348,15 +262,9 @@ export function apply(ctx: Context) {
       if (base === undefined) return <i18n path=".pleaseProvideBase" />;
       const page = options.page;
 
-      // Count all items and check if queried
-      // music exists.
-      const items = await ctx.database
-        .select("maimaidx.chart_info")
-        .where({
-          difficulty: { $gte: base, $lt: base + 1 },
-        })
-        .execute((row) => $.count(row.id));
-      if (items === 0)
+      // Query and check if queried music exists.
+      const results = await ctx.maimaidxSongDatabase.queryMusicByBasePaged(base, page);
+      if (results.total === 0)
         return (
           <i18n path=".songWithBaseNotFound">
             <>{base}</>
@@ -364,41 +272,20 @@ export function apply(ctx: Context) {
           </i18n>
         );
 
-      // Count pages and check if overflow
-      const totalPages = Math.ceil(items / itemPerPage);
-      if (page > totalPages)
+      // Check if overflow
+      if (page > results.total)
         return (
           <i18n path="commands.mai.search.messages.pageOverflow">
             <>{page}</>
-            <>{totalPages}</>
+            <>{results.total}</>
           </i18n>
         );
 
-      // Query the database for music.
-      const musics = await ctx.database
-        .join(
-          {
-            musicInfo: "maimaidx.music_info",
-            chart: "maimaidx.chart_info",
-          },
-          ({ musicInfo, chart }) => $.eq(musicInfo.id, chart.musicId)
-        )
-        .where((row) =>
-          $.and(
-            $.gte(row.chart.difficulty, base),
-            $.lt(row.chart.difficulty, base + 1)
-          )
-        )
-        .orderBy((row) => row.chart.difficulty)
-        .limit(itemPerPage)
-        .offset((page - 1) * itemPerPage)
-        .execute();
-
-      // Return paged search result
+      // Return paged search result.
       return (
         <>
           <i18n path="commands.mai.search.messages.followingResultsFound" />
-          {ctx.maimaidxImages.drawSearchResultsWithChart(musics, [
+          {ctx.maimaidxImages.drawSearchResultsWithChart(results.data, [
             {
               title: "定数",
               font: "torus",
@@ -407,7 +294,7 @@ export function apply(ctx: Context) {
           ])}
           <i18n path="commands.mai.search.messages.page">
             <>{page}</>
-            <>{totalPages}</>
+            <>{results.total}</>
           </i18n>
         </>
       );

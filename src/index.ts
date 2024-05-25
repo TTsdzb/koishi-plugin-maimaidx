@@ -1,9 +1,9 @@
 import { Context, Logger, Schema } from "koishi";
-import { extendDatabase, loadData } from "./database";
 import MaimaidxImages from "./images";
 import MaimaidxDivingFishSongCover from "./song-cover/diving-fish";
 import MaimaidxLocalSongCover from "./song-cover/local";
 import MaimaidxXraySongCover from "./song-cover/xray";
+import MaimaidxSongDatabase from "./song-database";
 import * as commands from "./commands";
 
 export const name = "maimaidx";
@@ -28,7 +28,10 @@ export const Config: Schema<Config> = Schema.object({
 });
 
 export function apply(ctx: Context, config: Config) {
-  ctx = ctx.isolate("maimaidxSongCover").isolate("maimaidxImages");
+  ctx = ctx
+    .isolate("maimaidxSongCover")
+    .isolate("maimaidxImages")
+    .isolate("maimaidxSongDatabase");
 
   const nickname = ctx.root.config.nickname
     ? ctx.root.config.nickname instanceof Array
@@ -44,9 +47,6 @@ export function apply(ctx: Context, config: Config) {
 
   // Register i18n
   ctx.i18n.define("zh-CN", require("./locales/zh-CN"));
-
-  // Extend database model
-  extendDatabase(ctx);
 
   // Load internal services
   switch (config.coverProvider) {
@@ -67,11 +67,7 @@ export function apply(ctx: Context, config: Config) {
     assetsPath: config.assetsPath,
     botName: nickname,
   });
-
-  // Load data from Diving-fish when ready
-  ctx.on("ready", async () => {
-    await loadData(ctx);
-  });
+  ctx.plugin(MaimaidxSongDatabase);
 
   // Register commands provided by plugin
   ctx.plugin(commands);

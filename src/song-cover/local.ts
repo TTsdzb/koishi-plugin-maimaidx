@@ -9,7 +9,9 @@ class MaimaidxLocalSongCover extends MaimaidxSongCover {
   }
 
   getCover(id: number): string {
-    return `${this.config.assetsPath}/mai/cover/${id > 1000 && id <= 10000 ? id + 10000 : id}.png`;
+    return `${this.config.assetsPath}/mai/cover/${
+      id > 1000 && id <= 10000 ? id + 10000 : id
+    }.png`;
   }
 }
 

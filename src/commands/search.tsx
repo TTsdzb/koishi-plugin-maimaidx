@@ -211,7 +211,11 @@ export function apply(ctx: Context) {
       const page = options.page;
 
       // Query and check if queried music exists.
-      const results = await ctx.maimaidxSongDatabase.queryMusicByBpmPaged(low, high, page);
+      const results = await ctx.maimaidxSongDatabase.queryMusicByBpmPaged(
+        low,
+        high,
+        page
+      );
       if (results.total === 0)
         return (
           <i18n path=".songWithBpmNotFound">
@@ -263,7 +267,10 @@ export function apply(ctx: Context) {
       const page = options.page;
 
       // Query and check if queried music exists.
-      const results = await ctx.maimaidxSongDatabase.queryMusicByBasePaged(base, page);
+      const results = await ctx.maimaidxSongDatabase.queryMusicByBasePaged(
+        base,
+        page
+      );
       if (results.total === 0)
         return (
           <i18n path=".songWithBaseNotFound">

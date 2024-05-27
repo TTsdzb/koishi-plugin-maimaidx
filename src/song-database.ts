@@ -163,14 +163,13 @@ class MaimaidxSongDatabase extends Service {
    * @returns All music and its chart matches the given base
    */
   async queryMusicByBase(base: number): Promise<JoinedMusicAndChart[]> {
-    return (
-      await this.ctx.database
+    return await this.ctx.database
       .join(
         {
           musicInfo: "maimaidx.music_info",
           chart: "maimaidx.chart_info",
         },
-        row => $.eq(row.musicInfo.id, row.chart.musicId)
+        (row) => $.eq(row.musicInfo.id, row.chart.musicId)
       )
       .where((row) =>
         $.and(
@@ -179,8 +178,7 @@ class MaimaidxSongDatabase extends Service {
         )
       )
       .orderBy((row) => row.chart.difficulty)
-      .execute()
-    );
+      .execute();
   }
 
   /**
@@ -259,11 +257,9 @@ class MaimaidxSongDatabase extends Service {
     limit: number = 30
   ): Promise<MaimaidxSongDatabase.PagedQueryResult<MusicInfo>> {
     return await this.queryPaged<MusicInfo>(
-      this.ctx.database
-        .select("maimaidx.music_info")
-        .where({
-          bpm: { $gte: low, $lte: high },
-        }),
+      this.ctx.database.select("maimaidx.music_info").where({
+        bpm: { $gte: low, $lte: high },
+      }),
       (row) => $.count(row.id),
       "bpm",
       page,
@@ -295,7 +291,12 @@ class MaimaidxSongDatabase extends Service {
           },
           (row) => $.eq(row.musicInfo.id, row.chart.musicId)
         )
-        .where((row) => $.and($.gte(row.chart.difficulty, base), $.lt(row.chart.difficulty, base + 1))),
+        .where((row) =>
+          $.and(
+            $.gte(row.chart.difficulty, base),
+            $.lt(row.chart.difficulty, base + 1)
+          )
+        ),
       (row) => $.count(row.chart.id),
       (row) => row.chart.difficulty,
       page,

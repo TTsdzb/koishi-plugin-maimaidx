@@ -125,7 +125,7 @@ class MaimaidxSongDatabase extends Service {
     return await this.ctx.database
       .select("maimaidx.music_info")
       .where({
-        title: { $regex: escapeRegExp(title) },
+        title: { $regex: new RegExp(escapeRegExp(title), "i") },
       })
       .orderBy("id")
       .execute();
@@ -198,7 +198,7 @@ class MaimaidxSongDatabase extends Service {
   ): Promise<MaimaidxSongDatabase.PagedQueryResult<MusicInfo>> {
     return await this.queryPaged<MusicInfo>(
       this.ctx.database.select("maimaidx.music_info").where({
-        artist: { $regex: escapeRegExp(artist) },
+        artist: { $regex: new RegExp(escapeRegExp(artist), "i") },
       }),
       (row) => $.count(row.id),
       "id",
@@ -231,7 +231,9 @@ class MaimaidxSongDatabase extends Service {
           },
           (row) => $.eq(row.musicInfo.id, row.chart.musicId)
         )
-        .where((row) => $.regex(row.chart.charter, escapeRegExp(charter))),
+        .where((row) =>
+          $.regex(row.chart.charter, new RegExp(escapeRegExp(charter), "i"))
+        ),
       (row) => $.count(row.chart.id),
       (row) => row.musicInfo.id,
       page,

@@ -11,18 +11,18 @@ export const inject = ["http", "database", "puppeteer"];
 
 export interface Config {
   assetsPath: string;
-  coverProvider: "diving-fish" | "local" | "xray";
+  coverProvider: "local" | "diving-fish" | "xray";
 }
 
 export const Config: Schema<Config> = Schema.object({
-  assetsPath: Schema.path().default("https://static.closure.cc/maimai-assets"),
+  assetsPath: Schema.path().required(),
   coverProvider: Schema.union([
-    Schema.const("diving-fish"),
     Schema.const("local"),
+    Schema.const("diving-fish"),
     Schema.const("xray"),
   ])
     .role("radio")
-    .default("diving-fish"),
+    .default("local"),
 }).i18n({
   "zh-CN": require("./locales/zh-CN")._config,
 });

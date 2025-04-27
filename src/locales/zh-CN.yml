@@ -210,6 +210,6 @@ _config:
   coverProvider:
     $desc: "选择生成图片时的歌曲封面来源。"
     $inner:
-      - "从水鱼查分器获取封面"
       - "从用户配置的资源 URL 获取封面。需要先配置自己的 assetsPath！"
+      - "从水鱼查分器获取封面"
       - "从 Xray Bot API 获取抽象画"

@@ -29,6 +29,6 @@ export async function fetchYuzuMusicAliases(
   ctx: Context
 ): Promise<YuzuApiAliases> {
   return YuzuApiAliases.parse(
-    await ctx.http.get("https://api.yuzuchan.moe/maimaidx/maimaidxalias")
+    await ctx.http.get("https://www.yuzuchan.moe/api/maimaidx/maimaidxalias")
   );
 }
